@@ -14,6 +14,16 @@ export function formatDate(date?: string) {
   return d.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
 }
 
+/** Compact range: "7 Jan – 28 Jan 2026", or "3 Dec 2025 – 28 Jan 2026" across years. */
+export function formatDateRange(start: string, end: string) {
+  const a = new Date(`${start}T00:00:00`);
+  const b = new Date(`${end}T00:00:00`);
+  if (Number.isNaN(a.getTime()) || Number.isNaN(b.getTime())) return `${start} – ${end}`;
+  const short = (d: Date, year: boolean) =>
+    d.toLocaleDateString("en-GB", { day: "numeric", month: "short", ...(year ? { year: "numeric" } : {}) });
+  return `${short(a, a.getFullYear() !== b.getFullYear())} – ${short(b, true)}`;
+}
+
 /** "7" → "07" */
 export function padWeek(n: number) {
   return String(n).padStart(2, "0");

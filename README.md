@@ -10,7 +10,7 @@ course, lists every week, and presents the reflection and team.
 - TypeScript (strict)
 - Tailwind CSS 4
 - MDX for weekly content (`next-mdx-remote` + `gray-matter`)
-- Lucide icons, Geist font
+- Lucide icons; Schibsted Grotesk + JetBrains Mono (self-hosted via `next/font`)
 - Started from the [Vercel Portfolio Starter Kit](https://vercel.com/templates/next.js/portfolio-starter-kit) (MIT)
 
 ## Getting started
@@ -101,7 +101,7 @@ app/                    Routes (App Router)
   weeks/[slug]/page.tsx One page per week
 components/
   layout/               Header, mobile menu, footer
-  sections/             Home page sections (hero, about, timeline, reflection, team)
+  sections/             Home page sections (hero, about, week grid, reflection, team)
   week/                 Week page parts (gallery, videos, links, pager…)
   ui/                   Shared building blocks (image, placeholders, section)
 content/                ← all editable text lives here

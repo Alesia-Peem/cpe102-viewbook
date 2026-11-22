@@ -1,38 +1,43 @@
 import Link from "next/link";
-import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { Week } from "@/types/content";
-import { padWeek } from "@/lib/utils";
+import { cn, padWeek } from "@/lib/utils";
+import { ContentImage } from "@/components/ui/content-image";
 
-/** Previous / next week links at the bottom of a week page. */
+function PagerCard({ week, direction }: { week: Week; direction: "prev" | "next" }) {
+  return (
+    <Link
+      href={`/weeks/${week.slug}`}
+      className={cn(
+        "card-link grid items-center gap-4 sm:gap-6",
+        direction === "prev"
+          ? "grid-cols-[5.5rem_1fr] sm:grid-cols-[9rem_1fr]"
+          : "grid-cols-[1fr_5.5rem] text-right sm:grid-cols-[1fr_9rem]",
+      )}
+    >
+      <ContentImage
+        image={week.cover}
+        placeholderLabel={`Week ${week.week}`}
+        aspect="aspect-[4/3]"
+        sizes="144px"
+        zoom
+        className={cn(direction === "next" && "order-2")}
+      />
+      <div className={cn("min-w-0", direction === "next" && "order-1")}>
+        <p className="font-mono text-xs uppercase tracking-[0.12em] text-muted">
+          {direction === "prev" ? `← Week ${padWeek(week.week)}` : `Week ${padWeek(week.week)} →`}
+        </p>
+        <p className="mt-1.5 font-semibold leading-snug tracking-tight sm:text-lg">{week.title || `Week ${week.week}`}</p>
+      </div>
+    </Link>
+  );
+}
+
+/** Previous / next week, as linked cards with their cover photos. */
 export function WeekPager({ prev, next }: { prev?: Week; next?: Week }) {
   return (
-    <nav aria-label="Previous and next week" className="mt-20 grid grid-cols-2 gap-4 border-t border-line pt-8">
-      <div>
-        {prev ? (
-          <Link href={`/weeks/${prev.slug}`} className="group block">
-            <span className="flex items-center gap-1 text-xs text-muted">
-              <ArrowLeft className="size-3.5 transition-transform group-hover:-translate-x-0.5" aria-hidden />
-              Week {padWeek(prev.week)}
-            </span>
-            <span className="mt-1 block font-medium text-ink group-hover:text-navy">
-              {prev.title || "Previous week"}
-            </span>
-          </Link>
-        ) : null}
-      </div>
-      <div className="text-right">
-        {next ? (
-          <Link href={`/weeks/${next.slug}`} className="group block">
-            <span className="flex items-center justify-end gap-1 text-xs text-muted">
-              Week {padWeek(next.week)}
-              <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden />
-            </span>
-            <span className="mt-1 block font-medium text-ink group-hover:text-navy">
-              {next.title || "Next week"}
-            </span>
-          </Link>
-        ) : null}
-      </div>
+    <nav aria-label="Previous and next week" className="grid gap-8 border-t border-line pt-10 md:grid-cols-2 md:gap-10">
+      <div>{prev ? <PagerCard week={prev} direction="prev" /> : null}</div>
+      <div>{next ? <PagerCard week={next} direction="next" /> : null}</div>
     </nav>
   );
 }

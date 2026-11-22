@@ -1,49 +1,80 @@
-import Link from "next/link";
-import { ArrowDown } from "lucide-react";
 import { site } from "@/content/site";
+import type { Week } from "@/types/content";
+import { getDateRange } from "@/lib/weeks";
+import { formatDateRange } from "@/lib/utils";
 import { Container } from "@/components/ui/section";
+import { ButtonLink } from "@/components/ui/button";
 import { ContentImage } from "@/components/ui/content-image";
 import { TextPlaceholder } from "@/components/ui/placeholder";
 
-export function Hero({ weekCount }: { weekCount: number }) {
+/** First screen: the course name set large, the facts, two actions and the main photograph. */
+export function Hero({ weeks }: { weeks: Week[] }) {
+  const range = getDateRange(weeks);
+  const first = weeks[0];
+
+  const facts: Array<{ label: string; value: React.ReactNode }> = [
+    { label: "Course", value: site.courseCode },
+    { label: "Team", value: site.groupName || <TextPlaceholder inline label="Team" /> },
+    { label: "Length", value: `${weeks.length} weeks` },
+    {
+      label: "Period",
+      value: range ? formatDateRange(range.start, range.end) : <TextPlaceholder inline label="Dates" />,
+    },
+  ];
+
   return (
     <section className="border-b border-line">
-      <Container className="grid items-center gap-10 py-14 sm:py-20 lg:grid-cols-[1.1fr_1fr] lg:gap-16 lg:py-24">
+      <Container className="flex min-h-[calc(100svh-4rem)] flex-col justify-center gap-10 py-12 lg:gap-12 lg:py-14">
         <div>
-          <p className="font-mono text-sm text-navy">
-            {site.courseCode}
-            {site.groupName ? <span className="text-muted"> · {site.groupName}</span> : null}
+          <p className="enter font-mono text-xs uppercase tracking-[0.12em] text-muted" style={{ "--i": 0 } as React.CSSProperties}>
+            A week-by-week journal
           </p>
-
-          <h1 className="mt-4 text-4xl font-semibold leading-[1.05] tracking-tight text-balance sm:text-5xl lg:text-6xl">
-            {site.courseName || <TextPlaceholder inline label="Course name placeholder" className="text-2xl" />}
+          <h1
+            className="enter mt-4 text-[clamp(3.25rem,8.6vw,8.25rem)] font-semibold leading-[0.9] tracking-[-0.05em] text-balance"
+            style={{ "--i": 1 } as React.CSSProperties}
+          >
+            {site.courseName || <TextPlaceholder inline label="Course name" />}
           </h1>
-
-          <div className="mt-6 max-w-xl text-lg leading-relaxed text-muted">
-            {site.tagline || <TextPlaceholder label="Short introduction to the website" />}
-          </div>
-
-          <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
-            <Link
-              href="/#weeks"
-              className="inline-flex items-center gap-2 bg-ink px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-navy"
-            >
-              Explore the {weekCount} weeks
-              <ArrowDown className="size-4" aria-hidden />
-            </Link>
-            <Link href="/#team" className="text-sm font-medium text-ink underline-offset-4 hover:underline">
-              Meet the team
-            </Link>
-          </div>
         </div>
 
-        <ContentImage
-          image={site.heroImage}
-          placeholderLabel="Main project photograph"
-          aspect="aspect-[4/3]"
-          sizes="(min-width: 1024px) 45vw, 100vw"
-          priority
-        />
+        <div className="grid gap-10 lg:grid-cols-12 lg:gap-10">
+          <div className="enter flex flex-col justify-between gap-10 lg:col-span-4" style={{ "--i": 2 } as React.CSSProperties}>
+            <div className="max-w-md text-lg leading-relaxed text-ink/80">
+              {site.tagline || <TextPlaceholder label="Short introduction to the website" />}
+            </div>
+
+            <div>
+              <dl className="grid grid-cols-2 gap-x-6 gap-y-4 border-t border-line pt-5 text-sm">
+                {facts.map((f) => (
+                  <div key={f.label}>
+                    <dt className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">{f.label}</dt>
+                    <dd className="mt-1 font-medium">{f.value}</dd>
+                  </div>
+                ))}
+              </dl>
+
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                {first ? (
+                  <ButtonLink href={`/weeks/${first.slug}`} arrow>
+                    Read week {first.week}
+                  </ButtonLink>
+                ) : null}
+                <ButtonLink href="/#weeks" variant="secondary">
+                  Browse all weeks
+                </ButtonLink>
+              </div>
+            </div>
+          </div>
+
+          <ContentImage
+            image={site.heroImage}
+            placeholderLabel="Main project photograph"
+            aspect="aspect-[4/3] lg:aspect-[16/9]"
+            sizes="(min-width: 1024px) 66vw, 100vw"
+            priority
+            className="enter lg:col-span-8"
+          />
+        </div>
       </Container>
     </section>
   );

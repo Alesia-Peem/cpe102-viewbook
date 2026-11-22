@@ -1,21 +1,24 @@
 @import "tailwindcss";
 
 /*
- * Design tokens. Palette: navy for text & structure, one sky-blue accent.
- * Use as Tailwind classes, e.g. text-ink, bg-navy, border-line, bg-accent.
+ * Design tokens — navy for text and structure, one signal-orange accent.
+ * Use as Tailwind classes, e.g. text-ink, bg-deep, border-line, text-accent.
  */
 @theme {
-  --color-ink: #1b1a3a;        /* headings, primary text */
-  --color-navy: #134b70;       /* links, dark sections */
-  --color-navy-deep: #201e43;  /* footer / reflection background */
-  --color-accent: #38b6ff;     /* small highlights only */
-  --color-muted: #5b6170;      /* secondary text */
-  --color-line: #e3e6ec;       /* borders and dividers */
-  --color-surface: #f5f7fa;    /* subtle backgrounds, placeholders */
+  --color-ink: #0f1b2a;          /* headings, primary text */
+  --color-navy: #163f66;         /* links, secondary emphasis */
+  --color-deep: #0c2238;         /* dark bands: reflection, footer */
+  --color-accent: #f2662b;       /* small highlights only — never body text on white */
+  --color-muted: #566070;        /* secondary text */
+  --color-line: #e2e4e8;         /* hairlines */
+  --color-line-strong: #c4c9d1;  /* outlines, hovered borders */
+  --color-surface: #f4f3ef;      /* subtle backgrounds, placeholders */
   --color-paper: #ffffff;
 
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-sans: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-code), ui-monospace, monospace;
+
+  --ease-out-ui: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 html {
@@ -41,70 +44,199 @@ body {
 
 :focus-visible {
   outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
+  outline-offset: 3px;
 }
 
-/* Long-form text written in the week MDX files */
-.prose-week {
-  color: var(--color-ink);
-  font-size: 1.0625rem;
-  line-height: 1.75;
+/* ───────────── Motion: quiet, pointer-only, off under reduced motion ───────────── */
+
+/* Hero entrance — runs once on load. Stagger with style={{ "--i": n }}. */
+@media (prefers-reduced-motion: no-preference) {
+  .enter {
+    animation: enter 700ms var(--ease-out-ui) both;
+    animation-delay: calc(var(--i, 0) * 90ms);
+  }
 }
-.prose-week > * + * {
-  margin-top: 1.1em;
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
-.prose-week h2 {
-  margin-top: 2em;
-  font-size: 1.375rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+
+/* Component classes live in the components layer so Tailwind utilities
+   (grid, flex, spacing…) on the same element can still override them. */
+@layer components {
+  /* Buttons: one system, two variants. */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 3rem;
+    padding: 0 1.25rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    border-radius: 2px;
+    transition:
+      transform 120ms var(--ease-out-ui),
+      background-color 120ms var(--ease-out-ui),
+      border-color 120ms var(--ease-out-ui);
+  }
+  .btn-primary {
+    background: var(--color-ink);
+    color: #fff;
+  }
+  .btn-secondary {
+    border: 1px solid var(--color-line-strong);
+    color: var(--color-ink);
+  }
+  .btn:active {
+    transform: translateY(1px) scale(0.985);
+    transition-duration: 90ms;
+  }
+
+  /* Underline that draws left-to-right (nav, footer, text links). */
+  .link-draw {
+    position: relative;
+  }
+  .link-draw::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -4px;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 120ms var(--ease-out-ui);
+  }
+  .link-draw:focus-visible::after,
+  .link-draw[aria-current]::after {
+    transform: scaleX(1);
+  }
+
+  /* Linked cards lift 2px; their photo zooms inside its frame. */
+  .card-link {
+    display: block;
+    transition: transform 120ms var(--ease-out-ui);
+  }
+  .zoom-img {
+    transition: transform 400ms var(--ease-out-ui);
+  }
+  .nudge {
+    transition: transform 120ms var(--ease-out-ui);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .btn:hover {
+      transform: translateY(-1px);
+      transition-duration: 150ms;
+    }
+    .btn:active {
+      transform: translateY(1px) scale(0.985);
+    }
+    .btn-primary:hover {
+      background: var(--color-navy);
+    }
+    .btn-secondary:hover {
+      border-color: var(--color-ink);
+      background: var(--color-surface);
+    }
+    .link-draw:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+      transition-duration: 150ms;
+    }
+    .card-link:hover {
+      transform: translateY(-2px);
+      transition-duration: 180ms;
+    }
+    .card-link:hover .zoom-img {
+      transform: scale(1.03);
+      transition-duration: 600ms;
+    }
+    .card-link:hover .nudge,
+    .btn:hover .nudge {
+      transform: translateX(3px);
+      transition-duration: 150ms;
+    }
+  }
 }
-.prose-week h3 {
-  margin-top: 1.6em;
-  font-size: 1.125rem;
-  font-weight: 600;
-}
-.prose-week a {
-  color: var(--color-navy);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  text-decoration-color: var(--color-accent);
-}
-.prose-week ul {
-  list-style: disc;
-  padding-left: 1.25em;
-}
-.prose-week ol {
-  list-style: decimal;
-  padding-left: 1.25em;
-}
-.prose-week li + li {
-  margin-top: 0.35em;
-}
-.prose-week strong {
-  font-weight: 600;
-}
-.prose-week blockquote {
-  border-left: 3px solid var(--color-accent);
-  padding-left: 1em;
-  color: var(--color-muted);
-}
-.prose-week code {
-  font-family: var(--font-mono);
-  font-size: 0.9em;
-  background: var(--color-surface);
-  padding: 0.1em 0.35em;
-  border-radius: 4px;
-}
-.prose-week pre {
-  background: var(--color-surface);
-  border: 1px solid var(--color-line);
-  border-radius: 6px;
-  padding: 1em;
-  overflow-x: auto;
-  font-size: 0.875rem;
-}
-.prose-week pre code {
-  background: none;
-  padding: 0;
+
+/* ───────────── Long-form text from the week MDX files ───────────── */
+@layer components {
+  .prose-week {
+    color: var(--color-ink);
+    font-size: 1.0625rem;
+    line-height: 1.75;
+  }
+  .prose-week > * + * {
+    margin-top: 1.1em;
+  }
+  .prose-week h2 {
+    margin-top: 2em;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+  }
+  .prose-week h3 {
+    margin-top: 1.6em;
+    font-size: 1.1875rem;
+    font-weight: 600;
+  }
+  .prose-week a {
+    color: var(--color-navy);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--color-line-strong);
+    transition: text-decoration-color 150ms;
+  }
+  .prose-week a:hover {
+    text-decoration-color: currentColor;
+  }
+  .prose-week ul {
+    list-style: disc;
+    padding-left: 1.25em;
+  }
+  .prose-week ol {
+    list-style: decimal;
+    padding-left: 1.25em;
+  }
+  .prose-week li + li {
+    margin-top: 0.35em;
+  }
+  .prose-week strong {
+    font-weight: 600;
+  }
+  .prose-week blockquote {
+    border-left: 2px solid var(--color-accent);
+    padding-left: 1em;
+    color: var(--color-muted);
+  }
+  .prose-week code {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    background: var(--color-surface);
+    padding: 0.1em 0.35em;
+    border-radius: 2px;
+  }
+  .prose-week pre {
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: 2px;
+    padding: 1em;
+    overflow-x: auto;
+    font-size: 0.875rem;
+  }
+  .prose-week pre code {
+    background: none;
+    padding: 0;
+  }
 }

@@ -7,10 +7,12 @@ type Props = {
   image?: ImageRef;
   /** Label shown on the placeholder when the photo is missing. */
   placeholderLabel: string;
-  /** Tailwind aspect ratio class, e.g. "aspect-[4/3]". */
+  /** Tailwind aspect ratio class(es), e.g. "aspect-[4/3]". */
   aspect?: string;
   sizes: string;
   priority?: boolean;
+  /** Zoom the photo slightly when a parent `.card-link` is hovered. */
+  zoom?: boolean;
   className?: string;
 };
 
@@ -25,6 +27,7 @@ export function ContentImage({
   aspect = "aspect-[4/3]",
   sizes,
   priority,
+  zoom = false,
   className,
 }: Props) {
   const hasImage = imageExists(image?.src);
@@ -38,7 +41,7 @@ export function ContentImage({
           fill
           sizes={sizes}
           priority={priority}
-          className="object-cover"
+          className={cn("object-cover", zoom && "zoom-img")}
         />
       ) : (
         <ImagePlaceholder label={placeholderLabel} />

@@ -46,6 +46,15 @@ export function getWeek(slug: string): Week | undefined {
   return getWeeks().find((w) => w.slug === slug);
 }
 
+/** First and last dated week — derived from the files, never invented. */
+export function getDateRange(weeks: Week[]) {
+  const dates = weeks
+    .map((w) => w.date)
+    .filter((d): d is string => !!d && !Number.isNaN(new Date(d).getTime()))
+    .sort();
+  return dates.length ? { start: dates[0], end: dates[dates.length - 1] } : undefined;
+}
+
 export function getAdjacentWeeks(slug: string) {
   const weeks = getWeeks();
   const i = weeks.findIndex((w) => w.slug === slug);

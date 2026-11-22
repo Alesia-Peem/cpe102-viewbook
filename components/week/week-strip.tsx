@@ -20,7 +20,7 @@ export function WeekStrip({ weeks, current }: { weeks: Week[]; current: string }
                 aria-current={active ? "page" : undefined}
                 title={w.title || `Week ${w.week}`}
                 className={cn(
-                  "flex h-9 items-center justify-center font-mono text-xs transition-colors sm:min-w-9 sm:px-2",
+                  "flex h-11 items-center justify-center font-mono text-xs transition-colors sm:h-9 sm:min-w-9 sm:px-2",
                   active ? "bg-ink text-white" : "text-muted hover:bg-surface hover:text-ink",
                 )}
               >

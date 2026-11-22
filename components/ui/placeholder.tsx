@@ -8,12 +8,12 @@ export function ImagePlaceholder({ label, className }: { label: string; classNam
       role="img"
       aria-label={`Image placeholder: ${label}`}
       className={cn(
-        "flex h-full w-full flex-col items-center justify-center gap-2 border border-dashed border-line bg-surface p-4 text-center",
+        "absolute inset-0 flex flex-col items-center justify-center gap-2 border border-dashed border-line-strong/70 bg-surface p-3 text-center",
         className,
       )}
     >
-      <ImageIcon aria-hidden className="size-6 text-muted/60" strokeWidth={1.5} />
-      <p className="font-mono text-[11px] uppercase leading-snug tracking-wide text-muted">
+      <ImageIcon aria-hidden className="size-5 text-muted/70" strokeWidth={1.5} />
+      <p className="font-mono text-[10px] uppercase leading-snug tracking-wide text-muted sm:text-[11px]">
         [Image placeholder: {label}]
       </p>
     </div>
@@ -30,18 +30,17 @@ export function TextPlaceholder({
   className?: string;
   inline?: boolean;
 }) {
-  const text = `[${inline ? "" : "Description placeholder: "}${label}]`;
   if (inline) {
-    return <span className={cn("font-mono text-[0.8em] text-muted", className)}>{text}</span>;
+    return <span className={cn("font-mono text-[0.8em] font-normal tracking-normal text-muted", className)}>[{label}]</span>;
   }
   return (
     <p
       className={cn(
-        "border-l-2 border-line py-1 pl-3 font-mono text-xs uppercase leading-relaxed tracking-wide text-muted",
+        "border-l-2 border-line-strong py-1 pl-3 font-mono text-xs uppercase leading-relaxed tracking-wide text-muted",
         className,
       )}
     >
-      {text}
+      [Description placeholder: {label}]
     </p>
   );
 }
