@@ -183,7 +183,7 @@ body {
     color: var(--color-ink);
   }
   .footer-link {
-    color: rgb(255 255 255 / 0.75);
+    color: rgb(255 255 255 / 0.7);
   }
   .footer-link:hover {
     color: #fff;

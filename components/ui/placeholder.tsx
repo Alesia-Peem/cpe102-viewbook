@@ -10,9 +10,9 @@ export function ImagePlaceholder({ label, file, compact = false }: { label: stri
       title={file ? `Add ${file}` : undefined}
       className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 border border-dashed border-line-strong bg-surface p-3 text-center"
     >
-      <ImageIcon aria-hidden className="size-5 text-muted/70" strokeWidth={1.5} />
+      <ImageIcon aria-hidden className="size-5 text-muted" strokeWidth={1.5} />
       <p className={cn("font-mono text-label uppercase text-muted", compact && "hidden sm:block")}>[Project image placeholder]</p>
-      <p className={cn("text-small font-medium leading-snug text-ink/80", compact && "text-label sm:text-small")}>{label}</p>
+      <p className={cn("text-small font-medium leading-snug text-ink", compact && "text-label sm:text-small")}>{label}</p>
       {file ? <p className={cn("max-w-full break-all font-mono text-label text-muted", compact && "hidden sm:block")}>{file}</p> : null}
     </div>
   );
@@ -26,7 +26,7 @@ export function TextPlaceholder({ label, file, className, inline = false }: { la
   return (
     <div className={cn("border-l-2 border-line-strong py-1 pl-4", className)}>
       <p className="font-mono text-label uppercase text-muted">[Project description — to be provided]</p>
-      <p className="mt-1 text-small text-ink/80">{label}</p>
+      <p className="mt-1 text-small text-ink">{label}</p>
       {file ? <p className="mt-0.5 font-mono text-label text-muted">Edit: {file}</p> : null}
     </div>
   );

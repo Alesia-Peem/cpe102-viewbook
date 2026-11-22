@@ -9,7 +9,7 @@ export function Container({ className, children }: { className?: string; childre
 /** Mono uppercase label with the accent mark, e.g. "About" above a section heading. */
 export function Eyebrow({ children, className, onDark = false }: { children: React.ReactNode; className?: string; onDark?: boolean }) {
   return (
-    <p className={cn("flex items-center gap-2 font-mono text-label uppercase", onDark ? "text-white/65" : "text-muted", className)}>
+    <p className={cn("flex items-center gap-2 font-mono text-label uppercase", onDark ? "text-white/70" : "text-muted", className)}>
       <span aria-hidden className="inline-block size-1.5 bg-accent" />
       {children}
     </p>

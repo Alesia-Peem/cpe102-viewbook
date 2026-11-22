@@ -12,7 +12,8 @@ function SmartLink({ href = "", ...props }: ComponentPropsWithoutRef<"a">) {
 
 /**
  * Optional component for placing a photo inside the written text:
- *   <Figure src="/images/weeks/week-01/whiteboard.jpg" caption="Our first sketch" />
+ *   <Figure src="/images/weeks/week-01/inline/whiteboard.jpg" caption="Our first sketch" />
+ * Keep inline photos in an `inline/` subfolder so they are not repeated in the week's gallery.
  */
 function Figure({ src, alt, caption }: { src?: string; alt?: string; caption?: string }) {
   return (
@@ -22,7 +23,7 @@ function Figure({ src, alt, caption }: { src?: string; alt?: string; caption?: s
         placeholderLabel={caption || "Inline photo"}
         sizes="(min-width: 768px) 720px, 100vw"
       />
-      {caption ? <figcaption className="mt-2 text-sm text-muted">{caption}</figcaption> : null}
+      {caption ? <figcaption className="mt-3 text-small text-muted">{caption}</figcaption> : null}
     </figure>
   );
 }

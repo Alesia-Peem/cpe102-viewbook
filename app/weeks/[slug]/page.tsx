@@ -89,7 +89,7 @@ export default async function WeekPage({ params }: Props) {
               <span className="sr-only">Week {week.week}: </span>
               {week.title ? <SplitWords text={week.title} start={2} /> : <TextPlaceholder inline label="Week title" />}
             </h1>
-            {week.summary ? <p className="mt-5 max-w-2xl text-lead text-ink/75">{week.summary}</p> : null}
+            {week.summary ? <p className="mt-5 max-w-2xl text-lead text-muted">{week.summary}</p> : null}
           </div>
         </header>
 
@@ -112,7 +112,7 @@ export default async function WeekPage({ params }: Props) {
                 <ul className="mt-3">
                   {contents.map((c) => (
                     <li key={c.id}>
-                      <a href={`#${c.id}`} className="nav-link -ml-3 text-ink/80">
+                      <a href={`#${c.id}`} className="nav-link -ml-3 text-ink">
                         {c.label}
                       </a>
                     </li>

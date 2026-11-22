@@ -18,7 +18,7 @@ export function Reflection() {
           <>
             <ScrollWords text={lead} className="mt-8 max-w-5xl text-h2 font-medium text-balance" />
             {rest.length > 0 ? (
-              <div className="mt-14 grid gap-6 text-body text-white/75 md:grid-cols-2 md:gap-10 lg:ml-auto lg:w-2/3">
+              <div className="mt-14 grid gap-6 text-body text-white/70 md:grid-cols-2 md:gap-10 lg:ml-auto lg:w-2/3">
                 {rest.map((p, i) => (
                   <p key={i}>{p}</p>
                 ))}
@@ -26,9 +26,9 @@ export function Reflection() {
             ) : null}
           </>
         ) : (
-          <div className="mt-8 max-w-3xl border-l-2 border-white/30 py-2 pl-4">
-            <p className="font-mono text-label uppercase text-white/75">[Project description — to be provided]</p>
-            <p className="mt-1 text-small text-white/65">
+          <div className="mt-8 max-w-3xl border-l-2 border-white/50 py-2 pl-4">
+            <p className="font-mono text-label uppercase text-white/70">[Project description — to be provided]</p>
+            <p className="mt-1 text-small text-white/70">
               Your reflection on the course. The first paragraph is set large here. Edit{" "}
               <code className="font-mono">content/site.ts → reflection.paragraphs</code>
             </p>

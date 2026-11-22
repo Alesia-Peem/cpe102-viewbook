@@ -19,7 +19,7 @@ export function About() {
               <>
                 <p className="text-lead text-ink">{lead}</p>
                 {rest.map((p, i) => (
-                  <p key={i} className="text-body text-ink/80">
+                  <p key={i} className="text-body text-ink">
                     {p}
                   </p>
                 ))}

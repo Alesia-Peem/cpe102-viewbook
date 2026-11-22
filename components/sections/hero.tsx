@@ -28,7 +28,7 @@ export function Hero({ weeks }: { weeks: Week[] }) {
 
         <div className="grid gap-10 lg:grid-cols-12">
           <div className="enter flex flex-col gap-8 lg:col-span-4 lg:justify-between" style={{ "--i": 2 } as React.CSSProperties}>
-            <div className="max-w-md text-lead text-ink/80">
+            <div className="max-w-md text-lead text-ink">
               {site.tagline || <TextPlaceholder label="Short introduction to the website" file="content/site.ts → tagline" />}
             </div>
 

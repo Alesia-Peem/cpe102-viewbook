@@ -11,6 +11,8 @@ course, lists every week, and presents the reflection and team.
 - Tailwind CSS 4
 - MDX for weekly content (`next-mdx-remote` + `gray-matter`)
 - Lucide icons; Schibsted Grotesk + JetBrains Mono (self-hosted via `next/font`)
+- [Motion](https://motion.dev) for animation (springs, scroll reveals; all off under *reduce motion*)
+- ESLint (`eslint-config-next`)
 - Started from the [Vercel Portfolio Starter Kit](https://vercel.com/templates/next.js/portfolio-starter-kit) (MIT)
 
 ## Getting started
@@ -29,12 +31,14 @@ Other scripts:
 | `npm run build`     | Production build                |
 | `npm run start`     | Serve the production build      |
 | `npm run typecheck` | Check TypeScript without output |
+| `npm run lint`      | ESLint (Next.js + TypeScript rules) |
 
 ## Editing content (no code changes needed)
 
-Anything left empty shows a clearly labelled placeholder such as
-`[IMAGE PLACEHOLDER: …]` or `[DESCRIPTION PLACEHOLDER: …]`, so the site
-never looks broken while content is still being written.
+Anything left empty shows a clearly labelled placeholder —
+`[PROJECT IMAGE PLACEHOLDER]` with the **exact file to add**, or
+`[PROJECT DESCRIPTION — TO BE PROVIDED]` with the **file to edit** — so the
+site never looks broken while content is still being written.
 
 ### Home page text — `content/site.ts`
 
@@ -71,27 +75,34 @@ Write the description for the week here. Use a blank line between paragraphs.
 
 ## You can add sub-headings
 
-<Figure src="/images/weeks/week-03/sketch.jpg" caption="A photo placed inside the text" />
+<Figure src="/images/weeks/week-03/inline/sketch.jpg" caption="A photo placed inside the text" />
 ```
 
 - To **add or remove a week**, add or delete a `week-XX.mdx` file — pages, the
   home page list and previous/next links update automatically.
 - Quote text values that contain a colon (`:`).
 
-### Images — `public/images/`
+### Images — just drop files into `public/images/`
 
-```
-public/images/
-  hero/            main photo on the home page
-  about/           photo in the “About the course” section
-  team/            team member portraits
-  weeks/week-01/   photos for week 1 (and so on)
-```
+Photos saved under these names appear automatically — no file needs editing:
 
-Reference images by their path **without** `public`, e.g.
-`/images/weeks/week-01/cover.jpg`. JPG/PNG/WebP all work; Next.js resizes
-and optimises them automatically. If a referenced file is missing, a
-placeholder is shown instead of a broken image.
+| Put the photo at | It appears as | Frame |
+| --- | --- | --- |
+| `public/images/hero/hero.jpg` | Home page main photograph | 16:9 (4:3 on phones) |
+| `public/images/about/about.jpg` | “About the course” photo | 5:4 |
+| `public/images/team/member-1.jpg`, `member-2.jpg` … | Team portraits, in order | 4:5 portrait |
+| `public/images/weeks/week-05/cover.jpg` | Week 5 main photo and its card | 21:9 (4:3 on cards) |
+| `public/images/weeks/week-05/` *any other photo* | Week 5 gallery, sorted by file name | 4:3 |
+| `public/images/weeks/week-05/inline/…` | Photos placed inside the text with `<Figure>` | 4:3 |
+
+- `.jpg`, `.jpeg`, `.png`, `.webp` and `.avif` all work; Next.js resizes and
+  compresses them. Photos are cropped to their frame, so keep the subject central.
+- Name gallery photos `01.jpg`, `02.jpg` … to control their order.
+- To add **captions** or **alt text**, list the photos under `gallery:` in the
+  week file (see the example above) — a list in the file replaces the folder.
+- A path written in a content file always wins over the folder convention.
+- Placeholders show the file name they are waiting for, so you can see at a
+  glance what is still missing.
 
 ## Project structure
 
@@ -103,7 +114,8 @@ components/
   layout/               Header, mobile menu, footer
   sections/             Home page sections (hero, about, week grid, reflection, team)
   week/                 Week page parts (gallery, videos, links, pager…)
-  ui/                   Shared building blocks (image, placeholders, section)
+  ui/                   Shared building blocks (image, placeholders, section, button, title block)
+  motion/               Animation building blocks and motion tokens
 content/                ← all editable text lives here
 lib/                    Data loading and helpers
 types/                  TypeScript content types
