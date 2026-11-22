@@ -7,6 +7,7 @@ import { ButtonLink } from "@/components/ui/button";
 import { ContentImage } from "@/components/ui/content-image";
 import { TextPlaceholder } from "@/components/ui/placeholder";
 import { TitleBlock } from "@/components/ui/title-block";
+import { SplitWords } from "@/components/motion/split-words";
 
 /** First screen: the course name set large, the title block of facts, two actions, the main photograph. */
 export function Hero({ weeks }: { weeks: Week[] }) {
@@ -20,8 +21,8 @@ export function Hero({ weeks }: { weeks: Week[] }) {
           <p className="enter font-mono text-label uppercase text-muted" style={{ "--i": 0 } as React.CSSProperties}>
             A week-by-week journal
           </p>
-          <h1 id="hero-title" className="enter mt-4 text-display font-semibold text-balance" style={{ "--i": 1 } as React.CSSProperties}>
-            {site.courseName || <TextPlaceholder inline label="Course name" />}
+          <h1 id="hero-title" className="mt-4 text-display font-semibold text-balance">
+            {site.courseName ? <SplitWords text={site.courseName} /> : <TextPlaceholder inline label="Course name" />}
           </h1>
         </div>
 
@@ -60,7 +61,7 @@ export function Hero({ weeks }: { weeks: Week[] }) {
             aspect="aspect-[4/3] lg:aspect-[16/9]"
             sizes="(min-width: 1024px) 66vw, 100vw"
             priority
-            className="enter lg:col-span-8"
+            className="media-in lg:col-span-8"
           />
         </div>
       </Container>

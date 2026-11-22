@@ -4,6 +4,7 @@ import { JetBrains_Mono, Schibsted_Grotesk } from "next/font/google";
 import { site } from "@/content/site";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
+import { MotionProvider } from "@/components/motion/motion-provider";
 
 // Fonts are downloaded at build time and served from this site (no request to Google at runtime).
 const display = Schibsted_Grotesk({ subsets: ["latin"], variable: "--font-display", display: "swap" });
@@ -27,6 +28,12 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${display.variable} ${code.variable}`}>
+      <head>
+        {/* Without JavaScript, scroll reveals never run — show their content straight away. */}
+        <noscript>
+          <style>{`[data-reveal]{opacity:1!important;transform:none!important;filter:none!important}`}</style>
+        </noscript>
+      </head>
       <body className="flex min-h-dvh flex-col font-sans antialiased">
         <a
           href="#main"
@@ -34,11 +41,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           Skip to content
         </a>
-        <SiteHeader />
-        <main id="main" className="flex-1">
-          {children}
-        </main>
-        <SiteFooter />
+        <MotionProvider>
+          <SiteHeader />
+          <main id="main" className="flex-1">
+            {children}
+          </main>
+          <SiteFooter />
+        </MotionProvider>
       </body>
     </html>
   );

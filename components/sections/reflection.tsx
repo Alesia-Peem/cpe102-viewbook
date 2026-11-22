@@ -1,5 +1,6 @@
 import { site } from "@/content/site";
 import { Container, Eyebrow } from "@/components/ui/section";
+import { ScrollWords } from "@/components/motion/scroll-words";
 
 /** Type-led section: the first reflection paragraph set large on the dark band. */
 export function Reflection() {
@@ -15,7 +16,7 @@ export function Reflection() {
 
         {lead ? (
           <>
-            <p className="mt-8 max-w-5xl text-h2 font-medium text-balance">{lead}</p>
+            <ScrollWords text={lead} className="mt-8 max-w-5xl text-h2 font-medium text-balance" />
             {rest.length > 0 ? (
               <div className="mt-14 grid gap-6 text-body text-white/75 md:grid-cols-2 md:gap-10 lg:ml-auto lg:w-2/3">
                 {rest.map((p, i) => (

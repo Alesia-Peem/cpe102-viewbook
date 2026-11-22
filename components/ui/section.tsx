@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { Reveal } from "@/components/motion/reveal";
 
 /** The page's one content width. Every block aligns to these left and right edges. */
 export function Container({ className, children }: { className?: string; children: React.ReactNode }) {
@@ -33,7 +34,7 @@ export function SectionHeader({
   onDark?: boolean;
 }) {
   return (
-    <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
+    <Reveal className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
       <div>
         <Eyebrow onDark={onDark}>{label}</Eyebrow>
         <h2 id={id} className="mt-4 text-h2 font-semibold text-balance">
@@ -41,7 +42,7 @@ export function SectionHeader({
         </h2>
       </div>
       {aside ? <div className={cn("max-w-sm text-small md:text-right", onDark ? "text-white/70" : "text-muted")}>{aside}</div> : null}
-    </div>
+    </Reveal>
   );
 }
 

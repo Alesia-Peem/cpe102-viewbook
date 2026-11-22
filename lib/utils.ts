@@ -1,6 +1,4 @@
-import fs from "node:fs";
-import path from "node:path";
-
+// Browser-safe helpers only (imported by client components). File-system helpers live in lib/images.ts.
 /** Join class names, skipping falsy values. */
 export function cn(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
@@ -27,16 +25,6 @@ export function formatDateRange(start: string, end: string) {
 /** "7" → "07" */
 export function padWeek(n: number) {
   return String(n).padStart(2, "0");
-}
-
-/**
- * True when `src` is a remote URL, or a local file that actually exists in /public.
- * Lets the site fall back to a placeholder instead of a broken image.
- */
-export function imageExists(src?: string) {
-  if (!src) return false;
-  if (/^https?:\/\//.test(src)) return true;
-  return fs.existsSync(path.join(process.cwd(), "public", src.replace(/^\//, "")));
 }
 
 /** Extract a YouTube video id from a URL or return the id as-is. */

@@ -12,6 +12,7 @@ import { WeekStrip } from "@/components/week/week-strip";
 import { WeekGallery } from "@/components/week/week-gallery";
 import { WeekLinks, WeekVideos } from "@/components/week/week-media";
 import { WeekPager } from "@/components/week/week-pager";
+import { SplitWords } from "@/components/motion/split-words";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -67,8 +68,16 @@ export default async function WeekPage({ params }: Props) {
       <Container className="pb-24 pt-12 sm:pb-32 sm:pt-16">
         {/* Header: the week number set large beside the title */}
         <header className="grid gap-6 lg:grid-cols-12 lg:gap-10">
-          <p aria-hidden className="enter font-mono text-numeral font-medium text-accent lg:col-span-3">
-            {padWeek(week.week)}
+          <p aria-hidden className="font-mono text-numeral font-medium text-accent lg:col-span-3">
+            <span className="digit-roll inline-flex overflow-hidden pb-[0.04em] leading-none">
+              {padWeek(week.week)
+                .split("")
+                .map((d, i) => (
+                  <span key={i} className="inline-block" style={{ "--i": i } as React.CSSProperties}>
+                    {d}
+                  </span>
+                ))}
+            </span>
           </p>
           <div className="enter lg:col-span-9 lg:self-end" style={{ "--i": 1 } as React.CSSProperties}>
             <p className="font-mono text-label uppercase text-muted">
@@ -78,7 +87,7 @@ export default async function WeekPage({ params }: Props) {
             </p>
             <h1 id="week-title" className="mt-3 text-h1 font-semibold text-balance">
               <span className="sr-only">Week {week.week}: </span>
-              {week.title || <TextPlaceholder inline label="Week title" />}
+              {week.title ? <SplitWords text={week.title} start={2} /> : <TextPlaceholder inline label="Week title" />}
             </h1>
             {week.summary ? <p className="mt-5 max-w-2xl text-lead text-ink/75">{week.summary}</p> : null}
           </div>
@@ -91,7 +100,7 @@ export default async function WeekPage({ params }: Props) {
           aspect="aspect-[4/3] md:aspect-[21/9]"
           sizes="(min-width: 1280px) 1200px, 100vw"
           priority
-          className="enter mt-10 sm:mt-14"
+          className="media-in mt-10 sm:mt-14"
         />
 
         {/* Story: optional "on this page" list + reading column (≈ 65 characters a line) */}

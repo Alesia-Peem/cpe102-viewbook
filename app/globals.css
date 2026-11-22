@@ -81,30 +81,56 @@ body {
   outline-offset: 3px;
 }
 
-/* ───────────── Motion: quiet, pointer-only, off under reduced motion ───────────── */
-
-/* Hero entrance — runs once on load. Stagger with style={{ "--i": n }}. */
+/* ───────────── Motion & states ─────────────
+ * One language (see components/motion/tokens.ts): ease-out cubic-bezier(.23,1,.32,1),
+ * 100–200ms for hover/press, 500–800ms for things entering. Transform, opacity, a little blur.
+ * Everything below is off under prefers-reduced-motion.
+ */
 @media (prefers-reduced-motion: no-preference) {
+  /* Page-load entrance for blocks (stagger with style={{ "--i": n }}). */
   .enter {
     animation: enter 700ms var(--ease-out-ui) both;
+    animation-delay: calc(120ms + var(--i, 0) * 90ms);
+  }
+  /* Headings: each word blurs in and rises (SplitWords). */
+  .word-in {
+    display: inline-block;
+    animation: word-in 800ms var(--ease-out-ui) both;
+    animation-delay: calc(80ms + var(--i, 0) * 70ms);
+  }
+  /* Large numerals: each digit rolls up inside its mask. */
+  .digit-roll > span {
+    animation: digit-up 750ms var(--ease-out-ui) both;
     animation-delay: calc(var(--i, 0) * 90ms);
+  }
+  /* Lead photographs: the frame opens from a slight inset. */
+  .media-in {
+    animation: media-in 1000ms var(--ease-out-ui) both;
+    animation-delay: 250ms;
   }
 }
 @keyframes enter {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
+  from { opacity: 0; transform: translateY(14px); filter: blur(4px); }
+  to { opacity: 1; transform: none; filter: blur(0); }
+}
+@keyframes word-in {
+  from { opacity: 0; transform: translateY(0.28em); filter: blur(10px); }
+  to { opacity: 1; transform: none; filter: blur(0); }
+}
+@keyframes digit-up {
+  from { transform: translateY(105%); }
+  to { transform: none; }
+}
+@keyframes media-in {
+  from { clip-path: inset(5% 4% 5% 4%); opacity: 0.4; }
+  to { clip-path: inset(0); opacity: 1; }
 }
 
 /* Component classes live in the components layer so Tailwind utilities
    (grid, flex, spacing…) on the same element can still override them. */
 @layer components {
-  /* Buttons: one system, two variants. */
+  /* Buttons: one system, two variants. Scale on hover/press comes from Motion (ButtonLink);
+     a plain <button class="btn"> gets the CSS press below. */
   .btn {
     display: inline-flex;
     align-items: center;
@@ -117,9 +143,9 @@ body {
     font-weight: 500;
     border-radius: 2px;
     transition:
-      transform 120ms var(--ease-out-ui),
-      background-color 120ms var(--ease-out-ui),
-      border-color 120ms var(--ease-out-ui);
+      background-color 150ms var(--ease-out-ui),
+      border-color 150ms var(--ease-out-ui),
+      transform 150ms var(--ease-out-ui);
   }
   .btn-primary {
     background: var(--color-ink);
@@ -129,33 +155,16 @@ body {
     border: 1px solid var(--color-line-strong);
     color: var(--color-ink);
   }
-  .btn:active {
-    transform: translateY(1px) scale(0.985);
-    transition-duration: 90ms;
+  button.btn:active {
+    transform: scale(0.98);
+  }
+  .btn[aria-disabled="true"],
+  .btn:disabled {
+    opacity: 0.45;
+    pointer-events: none;
   }
 
-  /* Underline that draws left-to-right (nav, footer, text links). */
-  .link-draw {
-    position: relative;
-  }
-  .link-draw::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -4px;
-    height: 1px;
-    background: currentColor;
-    transform: scaleX(0);
-    transform-origin: right;
-    transition: transform 120ms var(--ease-out-ui);
-  }
-  .link-draw:focus-visible::after,
-  .link-draw[aria-current]::after {
-    transform: scaleX(1);
-  }
-
-  /* Header and footer links: 44px tall targets, drawn underline on hover. */
+  /* Header, footer and in-page links: 44px targets; an underline draws in on hover/focus. */
   .nav-link,
   .footer-link {
     position: relative;
@@ -163,14 +172,21 @@ body {
     align-items: center;
     min-height: 2.75rem;
     font-size: var(--text-small);
-    transition: color 120ms var(--ease-out-ui);
+    transition: color 150ms var(--ease-out-ui);
   }
   .nav-link {
     padding: 0 0.75rem;
     color: var(--color-muted);
   }
+  .nav-link:hover,
+  .nav-link[aria-current] {
+    color: var(--color-ink);
+  }
   .footer-link {
     color: rgb(255 255 255 / 0.75);
+  }
+  .footer-link:hover {
+    color: #fff;
   }
   .nav-link::after,
   .footer-link::after {
@@ -180,7 +196,7 @@ body {
     background: currentColor;
     transform: scaleX(0);
     transform-origin: right;
-    transition: transform 120ms var(--ease-out-ui);
+    transition: transform 150ms var(--ease-out-ui);
   }
   .nav-link::after {
     left: 0.75rem;
@@ -191,6 +207,17 @@ body {
     left: 0;
     right: 0;
     bottom: 0.5rem;
+  }
+  .nav-link:hover::after,
+  .nav-link:focus-visible::after,
+  .footer-link:hover::after,
+  .footer-link:focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  /* The main nav draws its own gliding indicator (MainNav) instead. */
+  .nav-link--indicator::after {
+    display: none;
   }
 
   /* Links outside running text: navy, faint underline that darkens on hover. */
@@ -206,26 +233,23 @@ body {
     text-decoration-color: currentColor;
   }
 
-  /* Linked cards lift 2px; their photo zooms inside its frame. */
+  /* Linked cards: lift 2px on hover, settle on press; the photo zooms inside its frame. */
   .card-link {
     display: block;
-    transition: transform 120ms var(--ease-out-ui);
+    transition: transform 200ms var(--ease-out-ui);
+  }
+  .card-link:active {
+    transform: scale(0.985);
+    transition-duration: 100ms;
   }
   .zoom-img {
     transition: transform 400ms var(--ease-out-ui);
   }
   .nudge {
-    transition: transform 120ms var(--ease-out-ui);
+    transition: transform 150ms var(--ease-out-ui);
   }
 
   @media (hover: hover) and (pointer: fine) {
-    .btn:hover {
-      transform: translateY(-1px);
-      transition-duration: 150ms;
-    }
-    .btn:active {
-      transform: translateY(1px) scale(0.985);
-    }
     .btn-primary:hover {
       background: var(--color-navy);
     }
@@ -233,14 +257,11 @@ body {
       border-color: var(--color-ink);
       background: var(--color-surface);
     }
-    .link-draw:hover::after {
-      transform: scaleX(1);
-      transform-origin: left;
-      transition-duration: 150ms;
-    }
     .card-link:hover {
       transform: translateY(-2px);
-      transition-duration: 180ms;
+    }
+    .card-link:active {
+      transform: translateY(-1px) scale(0.985);
     }
     .card-link:hover .zoom-img {
       transform: scale(1.03);
@@ -249,7 +270,6 @@ body {
     .card-link:hover .nudge,
     .btn:hover .nudge {
       transform: translateX(3px);
-      transition-duration: 150ms;
     }
   }
 }
