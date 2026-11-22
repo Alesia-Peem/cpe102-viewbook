@@ -19,15 +19,15 @@ export function ImagePlaceholder({ label, file, compact = false }: { label: stri
 }
 
 /** Stands in for text that has not been written yet, naming the file where it goes. */
-export function TextPlaceholder({ label, file, className, inline = false }: { label: string; file?: string; className?: string; inline?: boolean }) {
+export function TextPlaceholder({ label, file, className, inline = false, onDark = false }: { label: string; file?: string; className?: string; inline?: boolean; onDark?: boolean }) {
   if (inline) {
     return <span className={cn("font-mono text-[0.75em] font-normal tracking-normal text-muted", className)}>[{label}]</span>;
   }
   return (
-    <div className={cn("border-l-2 border-line-strong py-1 pl-4", className)}>
-      <p className="font-mono text-label uppercase text-muted">[Project description — to be provided]</p>
-      <p className="mt-1 text-small text-ink">{label}</p>
-      {file ? <p className="mt-0.5 font-mono text-label text-muted">Edit: {file}</p> : null}
+    <div className={cn("border-l-2 py-1 pl-4", onDark ? "border-white/50" : "border-line-strong", className)}>
+      <p className={cn("font-mono text-label uppercase", onDark ? "text-white/70" : "text-muted")}>[Project description — to be provided]</p>
+      <p className={cn("mt-1 text-small", onDark ? "text-white" : "text-ink")}>{label}</p>
+      {file ? <p className={cn("mt-0.5 font-mono text-label", onDark ? "text-white/70" : "text-muted")}>Edit: {file}</p> : null}
     </div>
   );
 }

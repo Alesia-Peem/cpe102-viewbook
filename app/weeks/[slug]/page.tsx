@@ -13,6 +13,9 @@ import { WeekGallery } from "@/components/week/week-gallery";
 import { WeekLinks, WeekVideos } from "@/components/week/week-media";
 import { WeekPager } from "@/components/week/week-pager";
 import { SplitWords } from "@/components/motion/split-words";
+import { Spotlight } from "@/components/fx/spotlight";
+import { PointerGlow } from "@/components/fx/pointer-glow";
+import { TracingBeam } from "@/components/fx/tracing-beam";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -65,10 +68,14 @@ export default async function WeekPage({ params }: Props) {
         </Container>
       </div>
 
-      <Container className="pb-24 pt-12 sm:pb-32 sm:pt-16">
-        {/* Header: the week number set large beside the title */}
+      {/* Header band: dark stage with the week number set large beside the title */}
+      <div className="relative isolate overflow-hidden bg-deep pb-40 pt-12 text-white sm:pb-52 sm:pt-16">
+        <div aria-hidden className="fx-grid absolute inset-0 -z-10" />
+        <Spotlight className="-top-40 left-0 md:-top-32 md:left-40" />
+        <PointerGlow />
+        <Container className="relative z-10">
         <header className="grid gap-6 lg:grid-cols-12 lg:gap-10">
-          <p aria-hidden className="font-mono text-numeral font-medium text-accent lg:col-span-3">
+          <p aria-hidden className="fx-gradient-text font-mono text-numeral font-medium lg:col-span-3">
             <span className="digit-roll inline-flex overflow-hidden pb-[0.04em] leading-none">
               {padWeek(week.week)
                 .split("")
@@ -80,18 +87,22 @@ export default async function WeekPage({ params }: Props) {
             </span>
           </p>
           <div className="enter lg:col-span-9 lg:self-end" style={{ "--i": 1 } as React.CSSProperties}>
-            <p className="font-mono text-label uppercase text-muted">
+            <p className="font-mono text-label uppercase text-white/70">
               Week {padWeek(week.week)} of {padWeek(weeks.length)}
               <span aria-hidden> · </span>
               {date ?? "Date to come"}
             </p>
             <h1 id="week-title" className="mt-3 text-h1 font-semibold text-balance">
               <span className="sr-only">Week {week.week}: </span>
-              {week.title ? <SplitWords text={week.title} start={2} /> : <TextPlaceholder inline label="Week title" />}
+              {week.title ? <SplitWords text={week.title} start={2} /> : <TextPlaceholder inline label="Week title" className="text-white/70" />}
             </h1>
-            {week.summary ? <p className="mt-5 max-w-2xl text-lead text-muted">{week.summary}</p> : null}
+            {week.summary ? <p className="mt-5 max-w-2xl text-lead text-white/70">{week.summary}</p> : null}
           </div>
         </header>
+        </Container>
+      </div>
+
+      <Container className="pb-24 sm:pb-32">
 
         <ContentImage
           image={week.cover}
@@ -100,7 +111,7 @@ export default async function WeekPage({ params }: Props) {
           aspect="aspect-[4/3] md:aspect-[21/9]"
           sizes="(min-width: 1280px) 1200px, 100vw"
           priority
-          className="media-in mt-10 sm:mt-14"
+          className="media-in relative z-10 -mt-28 shadow-[0_30px_60px_-30px_rgb(12_34_56/0.5)] sm:-mt-40"
         />
 
         {/* Story: optional "on this page" list + reading column (≈ 65 characters a line) */}
@@ -123,11 +134,13 @@ export default async function WeekPage({ params }: Props) {
           ) : null}
 
           <div id="story" className="scroll-mt-24 lg:col-span-7 lg:col-start-4">
-            {week.body ? (
-              <MdxContent source={week.body} />
-            ) : (
-              <TextPlaceholder label={`What happened in week ${week.week}`} file={`content/weeks/${slug}.mdx (below the second ---)`} />
-            )}
+            <TracingBeam>
+              {week.body ? (
+                <MdxContent source={week.body} />
+              ) : (
+                <TextPlaceholder label={`What happened in week ${week.week}`} file={`content/weeks/${slug}.mdx (below the second ---)`} />
+              )}
+            </TracingBeam>
           </div>
         </div>
 

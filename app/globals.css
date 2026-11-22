@@ -17,9 +17,11 @@
   --color-line-strong: #cbc6ba;  /* outlines, placeholder borders */
   --color-surface: #f4f2ed;      /* quiet section ground, empty photo frames */
   --color-paper: #ffffff;        /* page ground */
+  --color-sky: #38b6ff;          /* second glow colour (from the reference site) — effects only */
 
-  --font-sans: var(--font-display), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-code), ui-monospace, monospace;
+  /* Thai characters fall through to Anuphan (Latin stays Schibsted Grotesk). */
+  --font-sans: var(--font-display), var(--font-thai), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-code), var(--font-thai), ui-monospace, monospace;
 
   /*
    * TYPE SCALE — the only sizes the site uses. Classes: text-display, text-numeral,
@@ -155,6 +157,14 @@ body {
     border: 1px solid var(--color-line-strong);
     color: var(--color-ink);
   }
+  .btn-light {
+    background: #fff;
+    color: var(--color-ink);
+  }
+  .btn-outline-light {
+    border: 1px solid rgb(255 255 255 / 0.3);
+    color: #fff;
+  }
   button.btn:active {
     transform: scale(0.98);
   }
@@ -257,6 +267,13 @@ body {
       border-color: var(--color-ink);
       background: var(--color-surface);
     }
+    .btn-light:hover {
+      background: #ffe9dd;
+    }
+    .btn-outline-light:hover {
+      border-color: #fff;
+      background: rgb(255 255 255 / 0.08);
+    }
     .card-link:hover {
       transform: translateY(-2px);
     }
@@ -272,6 +289,96 @@ body {
       transform: translateX(3px);
     }
   }
+}
+
+
+/* ───────────── Effects (Aceternity-style, own implementation) ─────────────
+ * Pointer effects run only for a mouse; everything rests under reduced motion.
+ */
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@layer components {
+  /* Line grid on dark grounds, faded out towards the edges. */
+  .fx-grid {
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.07) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.07) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 75% 65% at 50% 35%, #000 35%, transparent 100%);
+  }
+  /* Glow that follows the cursor (PointerGlow sets --x/--y). */
+  .fx-pointer-glow {
+    background: radial-gradient(520px circle at var(--x, 50%) var(--y, 30%), rgb(56 182 255 / 0.16), transparent 45%);
+    opacity: 0;
+    transition: opacity 300ms ease;
+  }
+  .fx-pointer-glow[data-active="true"] {
+    opacity: 1;
+  }
+  /* Gradient text for large numerals. */
+  .fx-gradient-text {
+    background: linear-gradient(160deg, #ffb38a 0%, var(--color-accent) 45%, var(--color-sky) 110%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  /* Button with a light travelling around its border. */
+  .btn-glow {
+    position: relative;
+    isolation: isolate;
+  }
+  .btn-glow::before {
+    content: "";
+    position: absolute;
+    inset: -1.5px;
+    z-index: -1;
+    border-radius: inherit;
+    background: conic-gradient(from var(--angle), transparent 0 55%, var(--color-accent) 72%, var(--color-sky) 88%, transparent 100%);
+  }
+  .btn-glow::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: inherit;
+  }
+  /* Gallery: hovering one photo softly blurs the others. */
+  @media (hover: hover) and (pointer: fine) {
+    .fx-focus-group:hover .fx-focus-item:not(:hover) {
+      filter: blur(3px);
+      opacity: 0.55;
+      transform: scale(0.985);
+    }
+  }
+  .fx-focus-item {
+    transition: filter 300ms var(--ease-out-ui), opacity 300ms var(--ease-out-ui), transform 300ms var(--ease-out-ui);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .btn-glow::before {
+    animation: spin-angle 3.2s linear infinite;
+  }
+  .fx-spotlight {
+    animation: spotlight-in 2s ease 0.6s both;
+  }
+}
+/* Reduced motion: decorative light rests in its final position instead of staying hidden. */
+@media (prefers-reduced-motion: reduce) {
+  .fx-spotlight {
+    opacity: 1;
+    transform: translate(-50%, -40%);
+  }
+}
+@keyframes spin-angle {
+  to { --angle: 360deg; }
+}
+@keyframes spotlight-in {
+  from { opacity: 0; transform: translate(-72%, -62%) scale(0.5); }
+  to { opacity: 1; transform: translate(-50%, -40%) scale(1); }
 }
 
 /* ───────────── Long-form text from the week MDX files ───────────── */

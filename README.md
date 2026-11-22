@@ -10,7 +10,7 @@ course, lists every week, and presents the reflection and team.
 - TypeScript (strict)
 - Tailwind CSS 4
 - MDX for weekly content (`next-mdx-remote` + `gray-matter`)
-- Lucide icons; Schibsted Grotesk + JetBrains Mono (self-hosted via `next/font`)
+- Lucide icons; Schibsted Grotesk + JetBrains Mono, with Anuphan for Thai text (all self-hosted via `next/font`)
 - [Motion](https://motion.dev) for animation (springs, scroll reveals; all off under *reduce motion*)
 - ESLint (`eslint-config-next`)
 - Started from the [Vercel Portfolio Starter Kit](https://vercel.com/templates/next.js/portfolio-starter-kit) (MIT)
@@ -116,6 +116,7 @@ components/
   week/                 Week page parts (gallery, videos, links, pager…)
   ui/                   Shared building blocks (image, placeholders, section, button, title block)
   motion/               Animation building blocks and motion tokens
+  fx/                   Visual effects: spotlight, pointer glow, tilt card, lamp, tracing beam, hover highlight
 content/                ← all editable text lives here
 lib/                    Data loading and helpers
 types/                  TypeScript content types

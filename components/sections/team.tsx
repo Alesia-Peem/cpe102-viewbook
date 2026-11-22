@@ -5,6 +5,7 @@ import { ContentImage } from "@/components/ui/content-image";
 import { TextPlaceholder } from "@/components/ui/placeholder";
 import { Reveal } from "@/components/motion/reveal";
 import { STAGGER } from "@/components/motion/tokens";
+import { TiltCard } from "@/components/fx/tilt-card";
 
 /** Portrait grid: 2 across on phones, 4 from tablet up. */
 export function Team() {
@@ -17,14 +18,16 @@ export function Team() {
         {members.map((m, i) => (
           <li key={i}>
             <Reveal delay={(i % 4) * STAGGER}>
-              <ContentImage
-                image={m.photo}
-                fallbackPath={`/images/team/member-${i + 1}`}
-                placeholderLabel={`Member ${i + 1} photo`}
-                compact
-                aspect="aspect-[4/5]"
-                sizes="(min-width: 768px) 25vw, 50vw"
-              />
+              <TiltCard max={9}>
+                <ContentImage
+                  image={m.photo}
+                  fallbackPath={`/images/team/member-${i + 1}`}
+                  placeholderLabel={`Member ${i + 1} photo`}
+                  compact
+                  aspect="aspect-[4/5]"
+                  sizes="(min-width: 768px) 25vw, 50vw"
+                />
+              </TiltCard>
               <h3 className="mt-4 text-h3 font-semibold">{m.name || <TextPlaceholder inline label={`Member ${i + 1} name`} />}</h3>
               {m.detail ? <p className="mt-1 font-mono text-label text-muted">{m.detail}</p> : null}
               {m.link?.href ? (

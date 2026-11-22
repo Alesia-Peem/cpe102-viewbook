@@ -17,12 +17,12 @@ export function WeekGallery({ images, week }: { images: ImageRef[]; week: number
       <h2 id="gallery-heading" className="text-h2 font-semibold">
         Gallery
       </h2>
-      <ul className={cn("mt-10 grid gap-x-6 gap-y-10", cols)}>
+      <ul className={cn("fx-focus-group mt-10 grid gap-x-6 gap-y-10", cols)}>
         {images.map((img, i) => {
           const fig = `Fig. ${padWeek(week)}.${i + 1}`;
           const label = img.alt || img.caption || `Week ${week} photo ${i + 1}`;
           return (
-            <li key={i}>
+            <li key={i} className="fx-focus-item">
               <Reveal delay={(i % 3) * STAGGER}>
                 <figure>
                   {img.src ? (
