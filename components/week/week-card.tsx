@@ -3,6 +3,7 @@ import type { Week } from "@/types/content";
 import { formatDate, padWeek } from "@/lib/utils";
 import { ContentImage } from "@/components/ui/content-image";
 import { TextPlaceholder } from "@/components/ui/placeholder";
+import { HyperText } from "@/components/fx/hyper-text";
 
 /** A week on the home page: cover photo, number and date, title, summary. Phones: thumbnail row. */
 export function WeekCard({ week }: { week: Week }) {
@@ -19,7 +20,7 @@ export function WeekCard({ week }: { week: Week }) {
       />
       <div className="min-w-0 sm:mt-4">
         <p className="flex flex-wrap items-center gap-x-2 font-mono text-label uppercase text-muted">
-          <span className="text-accent-text">W{padWeek(week.week)}</span>
+          <HyperText text={`W${padWeek(week.week)}`} hoverTarget="a" duration={450} className="text-accent-text" />
           <span aria-hidden>·</span>
           <span>{formatDate(week.date, "short") ?? "Date to come"}</span>
         </p>

@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Reveal } from "@/components/motion/reveal";
+import { HyperText } from "@/components/fx/hyper-text";
 
 /** The page's one content width. Every block aligns to these left and right edges. */
 export function Container({ className, children }: { className?: string; children: React.ReactNode }) {
@@ -7,12 +8,23 @@ export function Container({ className, children }: { className?: string; childre
 }
 
 /** Mono uppercase label with the accent mark, e.g. "About" above a section heading. */
-export function Eyebrow({ children, className, onDark = false }: { children: React.ReactNode; className?: string; onDark?: boolean }) {
+export function Eyebrow({
+  children,
+  className,
+  onDark = false,
+  as: Tag = "p",
+}: {
+  children: React.ReactNode;
+  className?: string;
+  onDark?: boolean;
+  /** Use "span" when the label sits inside a heading. */
+  as?: "p" | "span";
+}) {
   return (
-    <p className={cn("flex items-center gap-2 font-mono text-label uppercase", onDark ? "text-white/70" : "text-muted", className)}>
+    <Tag className={cn("flex items-center gap-2 font-mono text-label uppercase", onDark ? "text-white/70" : "text-muted", className)}>
       <span aria-hidden className="inline-block size-1.5 bg-accent" />
-      {children}
-    </p>
+      {typeof children === "string" ? <HyperText text={children} /> : children}
+    </Tag>
   );
 }
 

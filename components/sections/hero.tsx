@@ -11,6 +11,8 @@ import { SplitWords } from "@/components/motion/split-words";
 import { Spotlight } from "@/components/fx/spotlight";
 import { PointerGlow } from "@/components/fx/pointer-glow";
 import { TiltCard } from "@/components/fx/tilt-card";
+import { BorderBeam } from "@/components/fx/border-beam";
+import { NumberTicker } from "@/components/fx/number-ticker";
 
 /** First screen: the course name set large, the title block of facts, two actions, the main photograph. */
 export function Hero({ weeks }: { weeks: Week[] }) {
@@ -25,7 +27,7 @@ export function Hero({ weeks }: { weeks: Week[] }) {
       <Container className="relative z-10 flex min-h-[calc(100svh-4rem)] flex-col justify-center gap-10 py-12 lg:gap-12 lg:py-14">
         <div>
           <p className="enter font-mono text-label uppercase text-white/70" style={{ "--i": 0 } as React.CSSProperties}>
-            A week-by-week journal
+            <span className="fx-shiny">A week-by-week journal</span>
           </p>
           <h1 id="hero-title" className="mt-4 text-display font-semibold text-balance">
             {site.courseName ? <SplitWords text={site.courseName} /> : <TextPlaceholder inline label="Course name" />}
@@ -44,7 +46,7 @@ export function Hero({ weeks }: { weeks: Week[] }) {
                 rows={[
                   { label: "Course", value: site.courseCode },
                   { label: "Team", value: site.groupName || <TextPlaceholder inline label="Team" className="text-white/70" /> },
-                  { label: "Length", value: `${weeks.length} weeks` },
+                  { label: "Length", value: <><NumberTicker value={weeks.length} /> weeks</> },
                   { label: "Period", value: range ? formatDateRange(range.start, range.end) : <TextPlaceholder inline label="Dates" className="text-white/70" /> },
                 ]}
               />
@@ -70,6 +72,7 @@ export function Hero({ weeks }: { weeks: Week[] }) {
               sizes="(min-width: 1024px) 66vw, 100vw"
               priority
             />
+            <BorderBeam duration={9} />
           </TiltCard>
         </div>
       </Container>

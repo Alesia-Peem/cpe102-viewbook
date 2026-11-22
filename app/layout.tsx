@@ -5,6 +5,7 @@ import { site } from "@/content/site";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { MotionProvider } from "@/components/motion/motion-provider";
+import { ScrollProgress } from "@/components/fx/scroll-progress";
 
 // Fonts are downloaded at build time and served from this site (no request to Google at runtime).
 const display = Schibsted_Grotesk({ subsets: ["latin"], variable: "--font-display", display: "swap" });
@@ -46,6 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </a>
         <MotionProvider>
           <SiteHeader />
+          <ScrollProgress />
           <main id="main" className="flex-1">
             {children}
           </main>

@@ -2,6 +2,7 @@ import { site } from "@/content/site";
 import { Container, Eyebrow } from "@/components/ui/section";
 import { ScrollWords } from "@/components/motion/scroll-words";
 import { Lamp } from "@/components/fx/lamp";
+import { RetroGrid } from "@/components/fx/retro-grid";
 
 /** Type-led section: the first reflection paragraph set large on the dark band. */
 export function Reflection() {
@@ -11,9 +12,10 @@ export function Reflection() {
   return (
     <section id="reflection" aria-labelledby="reflection-title" className="relative isolate overflow-hidden bg-deep pb-24 text-white sm:pb-32">
       <Lamp />
-      <Container className="-mt-16 text-center">
+      <RetroGrid />
+      <Container className="relative z-10 -mt-16 text-center">
         <h2 id="reflection-title" className="flex justify-center">
-          <Eyebrow onDark>{title}</Eyebrow>
+          <Eyebrow onDark as="span">{title}</Eyebrow>
         </h2>
 
         {lead ? (

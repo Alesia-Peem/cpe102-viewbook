@@ -116,7 +116,8 @@ components/
   week/                 Week page parts (gallery, videos, links, pager…)
   ui/                   Shared building blocks (image, placeholders, section, button, title block)
   motion/               Animation building blocks and motion tokens
-  fx/                   Visual effects: spotlight, pointer glow, tilt card, lamp, tracing beam, hover highlight
+  fx/                   Visual effects: spotlight, pointer glow, tilt card, lamp, tracing beam, hover highlight,
+                        scroll progress, number ticker, hyper text, border beam, marquee, retro grid
 content/                ← all editable text lives here
 lib/                    Data loading and helpers
 types/                  TypeScript content types

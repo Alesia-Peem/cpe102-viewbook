@@ -381,6 +381,91 @@ body {
   to { opacity: 1; transform: translate(-50%, -40%) scale(1); }
 }
 
+/* ───────────── Magic UI-style effects (own implementation) ───────────── */
+@layer components {
+  /* Light that pans across text. */
+  .fx-shiny {
+    background: linear-gradient(110deg, rgb(255 255 255 / 0.55) 35%, #fff 50%, rgb(255 255 255 / 0.55) 65%);
+    background-size: 250% 100%;
+    background-position: 100% 0;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  /* A beam of light travelling along a frame's border. */
+  .fx-border-beam {
+    border: 1.5px solid transparent;
+    mask-image: linear-gradient(transparent, transparent), linear-gradient(#000, #000);
+    mask-clip: padding-box, border-box;
+    mask-composite: intersect;
+  }
+  .fx-border-beam::after {
+    content: "";
+    position: absolute;
+    aspect-ratio: 1;
+    width: var(--beam-size, 140px);
+    background: linear-gradient(to left, var(--color-accent), var(--color-sky), transparent);
+    offset-path: rect(0 auto auto 0);
+    offset-anchor: 90% 50%;
+  }
+  /* Infinite strip; content is rendered twice and slides by half its width. */
+  .fx-marquee {
+    display: flex;
+    width: max-content;
+  }
+  /* Perspective grid floor that scrolls towards the viewer. */
+  .fx-retro-grid {
+    position: absolute;
+    inset: 0;
+    margin-left: -200%;
+    width: 600vw;
+    height: 300vh;
+    transform-origin: 100% 0 0;
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.28) 1px, transparent 0),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.28) 1px, transparent 0);
+    background-size: 60px 60px;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .fx-shiny {
+    animation: shiny 4s linear infinite;
+  }
+  .fx-border-beam::after {
+    animation: beam var(--beam-duration, 8s) linear infinite;
+  }
+  .fx-marquee {
+    animation: marquee var(--marquee-duration, 60s) linear infinite;
+  }
+  .fx-retro-grid {
+    animation: retro-grid 18s linear infinite;
+  }
+}
+/* Unlayered, after the animation shorthand above, so pausing always wins. */
+.fx-marquee-group:hover .fx-marquee,
+.fx-marquee[data-paused="true"] {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .fx-border-beam {
+    display: none;
+  }
+}
+@keyframes shiny {
+  to { background-position: -150% 0; }
+}
+@keyframes beam {
+  from { offset-distance: 0%; }
+  to { offset-distance: 100%; }
+}
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+@keyframes retro-grid {
+  from { transform: translateY(-50%); }
+  to { transform: translateY(0); }
+}
+
 /* ───────────── Long-form text from the week MDX files ───────────── */
 @layer components {
   .prose-week {
