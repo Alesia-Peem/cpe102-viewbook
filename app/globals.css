@@ -18,6 +18,37 @@
   --font-sans: var(--font-display), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-code), ui-monospace, monospace;
 
+  /*
+   * TYPE SCALE — the only sizes the site uses. Classes: text-display, text-numeral,
+   * text-h1, text-h2, text-h3, text-lead, text-body, text-small, text-label.
+   * Schibsted Grotesk for words, JetBrains Mono for numbers, dates and labels.
+   * Nothing is set below 12px.
+   */
+  --text-display: clamp(3.25rem, 8.6vw, 8.25rem);   /* the course name on the first screen */
+  --text-display--line-height: 0.9;
+  --text-display--letter-spacing: -0.05em;
+  --text-numeral: clamp(4.5rem, 13vw, 10.5rem);     /* the week number on a week page */
+  --text-numeral--line-height: 0.8;
+  --text-numeral--letter-spacing: -0.06em;
+  --text-h1: clamp(2.375rem, 5vw, 4rem);            /* week titles */
+  --text-h1--line-height: 1.02;
+  --text-h1--letter-spacing: -0.04em;
+  --text-h2: clamp(2rem, 3.8vw, 3.125rem);          /* section headings */
+  --text-h2--line-height: 1.05;
+  --text-h2--letter-spacing: -0.035em;
+  --text-h3: 1.25rem;                                /* card titles, sub-headings */
+  --text-h3--line-height: 1.3;
+  --text-h3--letter-spacing: -0.015em;
+  --text-lead: clamp(1.1875rem, 1.5vw, 1.375rem);   /* opening paragraphs */
+  --text-lead--line-height: 1.5;
+  --text-body: 1.0625rem;                            /* running text */
+  --text-body--line-height: 1.7;
+  --text-small: 0.875rem;                            /* meta, captions, nav */
+  --text-small--line-height: 1.5;
+  --text-label: 0.75rem;                             /* mono uppercase labels */
+  --text-label--line-height: 1.4;
+  --text-label--letter-spacing: 0.1em;
+
   --ease-out-ui: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
@@ -78,7 +109,8 @@ body {
     gap: 0.5rem;
     min-height: 3rem;
     padding: 0 1.25rem;
-    font-size: 0.9375rem;
+    font-size: var(--text-small);
+    letter-spacing: 0.005em;
     font-weight: 500;
     border-radius: 2px;
     transition:
@@ -172,22 +204,24 @@ body {
 @layer components {
   .prose-week {
     color: var(--color-ink);
-    font-size: 1.0625rem;
-    line-height: 1.75;
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
   }
   .prose-week > * + * {
     margin-top: 1.1em;
   }
   .prose-week h2 {
     margin-top: 2em;
-    font-size: 1.5rem;
+    font-size: 1.625rem;
     font-weight: 600;
-    letter-spacing: -0.02em;
-    line-height: 1.25;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
   }
   .prose-week h3 {
     margin-top: 1.6em;
-    font-size: 1.1875rem;
+    font-size: var(--text-h3);
+    line-height: var(--text-h3--line-height);
+    letter-spacing: var(--text-h3--letter-spacing);
     font-weight: 600;
   }
   .prose-week a {
