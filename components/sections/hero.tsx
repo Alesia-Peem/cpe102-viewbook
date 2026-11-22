@@ -6,54 +6,41 @@ import { Container } from "@/components/ui/section";
 import { ButtonLink } from "@/components/ui/button";
 import { ContentImage } from "@/components/ui/content-image";
 import { TextPlaceholder } from "@/components/ui/placeholder";
+import { TitleBlock } from "@/components/ui/title-block";
 
-/** First screen: the course name set large, the facts, two actions and the main photograph. */
+/** First screen: the course name set large, the title block of facts, two actions, the main photograph. */
 export function Hero({ weeks }: { weeks: Week[] }) {
   const range = getDateRange(weeks);
   const first = weeks[0];
 
-  const facts: Array<{ label: string; value: React.ReactNode }> = [
-    { label: "Course", value: site.courseCode },
-    { label: "Team", value: site.groupName || <TextPlaceholder inline label="Team" /> },
-    { label: "Length", value: `${weeks.length} weeks` },
-    {
-      label: "Period",
-      value: range ? formatDateRange(range.start, range.end) : <TextPlaceholder inline label="Dates" />,
-    },
-  ];
-
   return (
-    <section className="border-b border-line">
+    <section aria-labelledby="hero-title" className="border-b border-line">
       <Container className="flex min-h-[calc(100svh-4rem)] flex-col justify-center gap-10 py-12 lg:gap-12 lg:py-14">
         <div>
-          <p className="enter font-mono text-xs uppercase tracking-[0.12em] text-muted" style={{ "--i": 0 } as React.CSSProperties}>
+          <p className="enter font-mono text-label uppercase text-muted" style={{ "--i": 0 } as React.CSSProperties}>
             A week-by-week journal
           </p>
-          <h1
-            className="enter mt-4 text-[clamp(3.25rem,8.6vw,8.25rem)] font-semibold leading-[0.9] tracking-[-0.05em] text-balance"
-            style={{ "--i": 1 } as React.CSSProperties}
-          >
+          <h1 id="hero-title" className="enter mt-4 text-display font-semibold text-balance" style={{ "--i": 1 } as React.CSSProperties}>
             {site.courseName || <TextPlaceholder inline label="Course name" />}
           </h1>
         </div>
 
-        <div className="grid gap-10 lg:grid-cols-12 lg:gap-10">
-          <div className="enter flex flex-col justify-between gap-10 lg:col-span-4" style={{ "--i": 2 } as React.CSSProperties}>
-            <div className="max-w-md text-lg leading-relaxed text-ink/80">
-              {site.tagline || <TextPlaceholder label="Short introduction to the website" />}
+        <div className="grid gap-10 lg:grid-cols-12">
+          <div className="enter flex flex-col gap-8 lg:col-span-4 lg:justify-between" style={{ "--i": 2 } as React.CSSProperties}>
+            <div className="max-w-md text-lead text-ink/80">
+              {site.tagline || <TextPlaceholder label="Short introduction to the website" file="content/site.ts → tagline" />}
             </div>
 
-            <div>
-              <dl className="grid grid-cols-2 gap-x-6 gap-y-4 border-t border-line pt-5 text-sm">
-                {facts.map((f) => (
-                  <div key={f.label}>
-                    <dt className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">{f.label}</dt>
-                    <dd className="mt-1 font-medium">{f.value}</dd>
-                  </div>
-                ))}
-              </dl>
-
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <div className="flex flex-col gap-6">
+              <TitleBlock
+                rows={[
+                  { label: "Course", value: site.courseCode },
+                  { label: "Team", value: site.groupName || <TextPlaceholder inline label="Team" /> },
+                  { label: "Length", value: `${weeks.length} weeks` },
+                  { label: "Period", value: range ? formatDateRange(range.start, range.end) : <TextPlaceholder inline label="Dates" /> },
+                ]}
+              />
+              <div className="flex flex-col gap-3 sm:flex-row">
                 {first ? (
                   <ButtonLink href={`/weeks/${first.slug}`} arrow>
                     Read week {first.week}
@@ -68,6 +55,7 @@ export function Hero({ weeks }: { weeks: Week[] }) {
 
           <ContentImage
             image={site.heroImage}
+            fallbackPath="/images/hero/hero"
             placeholderLabel="Main project photograph"
             aspect="aspect-[4/3] lg:aspect-[16/9]"
             sizes="(min-width: 1024px) 66vw, 100vw"

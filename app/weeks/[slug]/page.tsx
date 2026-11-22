@@ -42,19 +42,21 @@ export default async function WeekPage({ params }: Props) {
   const videos = week.videos ?? [];
   const links = week.links ?? [];
 
-  // "On this page" entries — only for parts this week actually has.
+  // "On this page" only appears when the week has more than its story.
   const contents = [
     { id: "story", label: "This week" },
     gallery.length ? { id: "gallery", label: `Gallery (${gallery.length})` } : null,
     videos.length ? { id: "videos", label: `Videos (${videos.length})` } : null,
     links.length ? { id: "links", label: `Links (${links.length})` } : null,
   ].filter((c): c is { id: string; label: string } => c !== null);
+  const showContents = contents.length > 1;
 
   return (
-    <article>
+    <article aria-labelledby="week-title">
+      {/* Week navigation bar */}
       <div className="border-b border-line">
-        <Container className="flex flex-col gap-3 py-3 sm:flex-row sm:items-center sm:justify-between">
-          <Link href="/#weeks" className="link-draw inline-flex min-h-11 items-center gap-1.5 self-start text-sm text-muted hover:text-ink sm:min-h-0 sm:self-center">
+        <Container className="flex flex-col gap-2 py-2 lg:flex-row lg:items-center lg:justify-between">
+          <Link href="/#weeks" className="nav-link -ml-3 gap-1.5 self-start lg:self-center">
             <ArrowLeft className="size-4" aria-hidden />
             All weeks
           </Link>
@@ -62,31 +64,29 @@ export default async function WeekPage({ params }: Props) {
         </Container>
       </div>
 
-      <Container className="pt-12 sm:pt-16">
+      <Container className="pb-24 pt-12 sm:pb-32 sm:pt-16">
         {/* Header: the week number set large beside the title */}
         <header className="grid gap-6 lg:grid-cols-12 lg:gap-10">
-          <p
-            aria-hidden
-            className="enter font-mono text-[clamp(4.5rem,13vw,11rem)] font-medium leading-[0.8] tracking-[-0.06em] text-accent lg:col-span-3"
-          >
+          <p aria-hidden className="enter font-mono text-numeral font-medium text-accent lg:col-span-3">
             {padWeek(week.week)}
           </p>
           <div className="enter lg:col-span-9 lg:self-end" style={{ "--i": 1 } as React.CSSProperties}>
-            <p className="font-mono text-xs uppercase tracking-[0.12em] text-muted">
+            <p className="font-mono text-label uppercase text-muted">
               Week {padWeek(week.week)} of {padWeek(weeks.length)}
               <span aria-hidden> · </span>
-              {date ?? "[Date]"}
+              {date ?? "Date to come"}
             </p>
-            <h1 className="mt-3 text-4xl font-semibold leading-[1.02] tracking-[-0.04em] text-balance sm:text-6xl">
+            <h1 id="week-title" className="mt-3 text-h1 font-semibold text-balance">
               <span className="sr-only">Week {week.week}: </span>
               {week.title || <TextPlaceholder inline label="Week title" />}
             </h1>
-            {week.summary ? <p className="mt-5 max-w-2xl text-lg leading-relaxed text-ink/75 sm:text-xl">{week.summary}</p> : null}
+            {week.summary ? <p className="mt-5 max-w-2xl text-lead text-ink/75">{week.summary}</p> : null}
           </div>
         </header>
 
         <ContentImage
           image={week.cover}
+          fallbackPath={`/images/weeks/${slug}/cover`}
           placeholderLabel={`Week ${week.week} main photograph`}
           aspect="aspect-[4/3] md:aspect-[21/9]"
           sizes="(min-width: 1280px) 1200px, 100vw"
@@ -94,28 +94,30 @@ export default async function WeekPage({ params }: Props) {
           className="enter mt-10 sm:mt-14"
         />
 
-        {/* Body: "on this page" sidebar + reading column */}
+        {/* Story: optional "on this page" list + reading column (≈ 65 characters a line) */}
         <div className="mt-14 grid gap-10 sm:mt-20 lg:grid-cols-12">
-          <aside className="hidden lg:col-span-3 lg:block">
-            <nav aria-label="On this page" className="sticky top-24">
-              <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">On this page</p>
-              <ul className="mt-4 space-y-2.5 text-sm">
-                {contents.map((c) => (
-                  <li key={c.id}>
-                    <a href={`#${c.id}`} className="link-draw text-ink/75 hover:text-ink">
-                      {c.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </aside>
+          {showContents ? (
+            <aside className="hidden lg:col-span-3 lg:block">
+              <nav aria-label="On this page" className="sticky top-24">
+                <p className="font-mono text-label uppercase text-muted">On this page</p>
+                <ul className="mt-3">
+                  {contents.map((c) => (
+                    <li key={c.id}>
+                      <a href={`#${c.id}`} className="nav-link -ml-3 text-ink/80">
+                        {c.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            </aside>
+          ) : null}
 
-          <div id="story" className="scroll-mt-24 lg:col-span-7">
+          <div id="story" className="scroll-mt-24 lg:col-span-7 lg:col-start-4">
             {week.body ? (
               <MdxContent source={week.body} />
             ) : (
-              <TextPlaceholder label={`Waiting for user-provided description of week ${week.week}`} />
+              <TextPlaceholder label={`What happened in week ${week.week}`} file={`content/weeks/${slug}.mdx (below the second ---)`} />
             )}
           </div>
         </div>
@@ -127,7 +129,6 @@ export default async function WeekPage({ params }: Props) {
           <WeekPager prev={prev} next={next} />
         </div>
       </Container>
-      <div className="h-20 sm:h-28" />
     </article>
   );
 }

@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
 import type { Week, WeekFrontmatter } from "@/types/content";
+import { folderGallery } from "@/lib/images";
 
 const WEEKS_DIR = path.join(process.cwd(), "content", "weeks");
 
@@ -19,7 +20,8 @@ function readWeek(file: string): Week {
     week: typeof fm.week === "number" ? fm.week : fromName,
     // YAML parses unquoted dates into Date objects; normalise to a string.
     date: fm.date ? toIsoDate(fm.date as unknown) : undefined,
-    gallery: fm.gallery ?? [],
+    // No gallery listed in the file → use every photo in public/images/weeks/<slug>/ except the cover.
+    gallery: fm.gallery?.length ? fm.gallery : folderGallery(slug),
     videos: fm.videos ?? [],
     links: fm.links ?? [],
     slug,

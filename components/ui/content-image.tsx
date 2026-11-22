@@ -1,42 +1,38 @@
 import Image from "next/image";
 import type { ImageRef } from "@/types/content";
-import { cn, imageExists } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { resolveImage } from "@/lib/images";
 import { ImagePlaceholder } from "./placeholder";
 
 type Props = {
   image?: ImageRef;
-  /** Label shown on the placeholder when the photo is missing. */
+  /** Conventional location without extension, e.g. "/images/weeks/week-05/cover" (see lib/images.ts). */
+  fallbackPath?: string;
+  /** What the photo should show — the placeholder's label and the default alt text. */
   placeholderLabel: string;
-  /** Tailwind aspect ratio class(es), e.g. "aspect-[4/3]". */
+  /** Tailwind aspect ratio class(es); photos are cropped to it so every frame lines up. */
   aspect?: string;
   sizes: string;
   priority?: boolean;
   /** Zoom the photo slightly when a parent `.card-link` is hovered. */
   zoom?: boolean;
+  /** Small frame: the placeholder hides the file path on phones. */
+  compact?: boolean;
   className?: string;
 };
 
 /**
- * Renders a user photo inside a fixed aspect-ratio frame, or a labelled
- * placeholder if the path is empty or the file is not in /public yet.
- * (Server component — the file check runs at build time.)
+ * A photograph in a fixed aspect-ratio frame, or a labelled placeholder naming the file to add.
+ * Server component — the file check runs at build time (and on each request in `npm run dev`).
  */
-export function ContentImage({
-  image,
-  placeholderLabel,
-  aspect = "aspect-[4/3]",
-  sizes,
-  priority,
-  zoom = false,
-  className,
-}: Props) {
-  const hasImage = imageExists(image?.src);
+export function ContentImage({ image, fallbackPath, placeholderLabel, aspect = "aspect-[4/3]", sizes, priority, zoom = false, compact = false, className }: Props) {
+  const { src, expected } = resolveImage(image, fallbackPath);
 
   return (
     <div className={cn("relative w-full overflow-hidden bg-surface", aspect, className)}>
-      {hasImage ? (
+      {src ? (
         <Image
-          src={image!.src!}
+          src={src}
           alt={image?.alt || image?.caption || placeholderLabel}
           fill
           sizes={sizes}
@@ -44,7 +40,7 @@ export function ContentImage({
           className={cn("object-cover", zoom && "zoom-img")}
         />
       ) : (
-        <ImagePlaceholder label={placeholderLabel} />
+        <ImagePlaceholder label={placeholderLabel} file={expected} compact={compact} />
       )}
     </div>
   );

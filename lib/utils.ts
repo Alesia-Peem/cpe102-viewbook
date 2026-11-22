@@ -6,12 +6,12 @@ export function cn(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
 }
 
-/** "2026-01-15" → "15 January 2026". Returns undefined for empty/invalid input. */
-export function formatDate(date?: string) {
+/** "2026-01-15" → "15 January 2026" (long) or "15 Jan 2026" (short). Undefined for empty input. */
+export function formatDate(date?: string, style: "long" | "short" = "long") {
   if (!date) return undefined;
   const d = new Date(date.includes("T") ? date : `${date}T00:00:00`);
   if (Number.isNaN(d.getTime())) return date;
-  return d.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+  return d.toLocaleDateString("en-GB", { day: "numeric", month: style, year: "numeric" });
 }
 
 /** Compact range: "7 Jan – 28 Jan 2026", or "3 Dec 2025 – 28 Jan 2026" across years. */

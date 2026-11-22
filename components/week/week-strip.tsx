@@ -4,13 +4,13 @@ import { cn, padWeek } from "@/lib/utils";
 
 /**
  * Week numbers for jumping between weeks.
- * Phones: a grid of 8 per row so every week (and the current one) is always visible.
- * Larger screens: a single row.
+ * Phones and tablets: a grid of 8 per row with 44px targets, every week always visible.
+ * Laptops and up: a single row.
  */
 export function WeekStrip({ weeks, current }: { weeks: Week[]; current: string }) {
   return (
     <nav aria-label="All weeks">
-      <ol className="grid grid-cols-8 gap-1 sm:flex sm:flex-wrap sm:justify-end">
+      <ol className="grid grid-cols-8 gap-1 lg:flex lg:flex-wrap lg:justify-end">
         {weeks.map((w) => {
           const active = w.slug === current;
           return (
@@ -20,7 +20,7 @@ export function WeekStrip({ weeks, current }: { weeks: Week[]; current: string }
                 aria-current={active ? "page" : undefined}
                 title={w.title || `Week ${w.week}`}
                 className={cn(
-                  "flex h-11 items-center justify-center font-mono text-xs transition-colors sm:h-9 sm:min-w-9 sm:px-2",
+                  "flex h-11 items-center justify-center font-mono text-label tracking-normal transition-colors lg:h-9 lg:min-w-9 lg:px-2",
                   active ? "bg-ink text-white" : "text-muted hover:bg-surface hover:text-ink",
                 )}
               >
