@@ -51,39 +51,41 @@ export default async function WeekPage({ params }: Props) {
         </Container>
       </div>
 
-      <Container className="max-w-3xl py-12 sm:py-16">
-        <header>
-          <p className="font-mono text-sm text-navy">
-            Week {padWeek(week.week)} of {padWeek(weeks.length)}
-            <span className="text-muted"> · {date ?? <TextPlaceholder inline label="Date" />}</span>
-          </p>
-          <h1 className="mt-4 text-3xl font-semibold leading-tight tracking-tight text-balance sm:text-5xl">
-            {week.title || <TextPlaceholder inline label="Week title placeholder" className="text-xl" />}
-          </h1>
-          {week.summary ? <p className="mt-5 text-lg leading-relaxed text-muted">{week.summary}</p> : null}
-        </header>
+      <Container className="py-12 sm:py-16">
+        <div className="mx-auto max-w-3xl">
+          <header>
+            <p className="font-mono text-sm text-navy">
+              Week {padWeek(week.week)} of {padWeek(weeks.length)}
+              <span className="text-muted"> · {date ?? <TextPlaceholder inline label="Date" />}</span>
+            </p>
+            <h1 className="mt-4 text-3xl font-semibold leading-tight tracking-tight text-balance sm:text-5xl">
+              {week.title || <TextPlaceholder inline label="Week title placeholder" className="text-xl" />}
+            </h1>
+            {week.summary ? <p className="mt-5 text-lg leading-relaxed text-muted">{week.summary}</p> : null}
+          </header>
 
-        <ContentImage
-          image={week.cover}
-          placeholderLabel={`Week ${week.week} main photograph`}
-          aspect="aspect-[16/9]"
-          sizes="(min-width: 768px) 768px, 100vw"
-          priority
-          className="mt-10"
-        />
+          <ContentImage
+            image={week.cover}
+            placeholderLabel={`Week ${week.week} main photograph`}
+            aspect="aspect-[16/9]"
+            sizes="(min-width: 768px) 768px, 100vw"
+            priority
+            className="mt-10"
+          />
 
-        <div className="mt-10">
-          {week.body ? (
-            <MdxContent source={week.body} />
-          ) : (
-            <TextPlaceholder label={`Waiting for user-provided description of week ${week.week}`} />
-          )}
+          <div className="mt-10">
+            {week.body ? (
+              <MdxContent source={week.body} />
+            ) : (
+              <TextPlaceholder label={`Waiting for user-provided description of week ${week.week}`} />
+            )}
+          </div>
+
+          <WeekGallery images={week.gallery ?? []} week={week.week} />
+          <WeekVideos videos={week.videos ?? []} />
+          <WeekLinks links={week.links ?? []} />
+          <WeekPager prev={prev} next={next} />
         </div>
-
-        <WeekGallery images={week.gallery ?? []} week={week.week} />
-        <WeekVideos videos={week.videos ?? []} />
-        <WeekLinks links={week.links ?? []} />
-        <WeekPager prev={prev} next={next} />
       </Container>
     </article>
   );
