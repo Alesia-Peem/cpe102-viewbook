@@ -1,0 +1,7 @@
+/** Main navigation. Hash links point to sections on the home page. */
+export const navItems = [
+  { label: "About", href: "/#about" },
+  { label: "Weeks", href: "/#weeks" },
+  { label: "Reflection", href: "/#reflection" },
+  { label: "Team", href: "/#team" },
+] as const;
