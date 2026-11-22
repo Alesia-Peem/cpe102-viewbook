@@ -18,7 +18,7 @@ function PagerCard({ week, direction }: { week: Week; direction: "prev" | "next"
         image={week.cover}
         fallbackPath={`/images/weeks/${week.slug}/cover`}
         placeholderLabel={`Week ${week.week}`}
-        compact
+        tiny
         aspect="aspect-[4/3]"
         sizes="144px"
         zoom

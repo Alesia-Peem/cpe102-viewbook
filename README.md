@@ -1,6 +1,8 @@
-# CPE102 Engineering Exploration — Team D01
+# CPE102 Viewbook — Engineering Exploration (Team D01)
 
-A week-by-week journal website for the CPE102 Engineering Exploration course by Team D01, built with Next.js.
+The Viewbook assignment for CPE102 Engineering Exploration (KMUTT Computer Engineering,
+semester 1/2569) by Team D01: a website that introduces the course to next year's
+students — the weekly topics, our two projects and our attitude towards the course.
 Each week of the semester has its own page; the home page introduces the
 course, lists every week, and presents the reflection and team.
 
@@ -40,6 +42,12 @@ Anything left empty shows a clearly labelled placeholder —
 `[PROJECT DESCRIPTION — TO BE PROVIDED]` with the **file to edit** — so the
 site never looks broken while content is still being written.
 
+### Course facts — `content/course.ts` (from the syllabus)
+
+Course description, instructors, learning outcomes, grading, the Viewbook brief and the
+three parts of the semester, taken from the official syllabus. Edit only to correct.
+`content/MATERIALS.md` lists which course file each fact came from.
+
 ### Home page text — `content/site.ts`
 
 Course name, group name, short introduction, “About” paragraphs, reflection
@@ -47,8 +55,12 @@ paragraphs and team members.
 
 ### Each week — `content/weeks/week-XX.mdx`
 
-The part between the `---` lines holds the details; everything **below**
-the second `---` is the week’s main description (plain text / Markdown).
+The part between the `---` lines holds the details. The top block (title,
+subtitle, dates, instructor, phase, deliverable, `covered`, `tools`) is already
+filled in **from the syllabus and course materials** — edit only to correct it.
+Your part is the block marked *Your own content* (summary, photos, videos,
+links) and everything **below** the second `---`: your group's reflection on
+the week (plain text / Markdown).
 
 ```mdx
 ---
@@ -78,6 +90,14 @@ Write the description for the week here. Use a blank line between paragraphs.
 <Figure src="/images/weeks/week-03/inline/sketch.jpg" caption="A photo placed inside the text" />
 ```
 
+### The two projects — `content/projects/*.mdx`
+
+`first-project.mdx` (the gemstone sorting robot) and `final-project.mdx` hold the
+brief, rules and scoring from the course documents. Add your own `ourTitle`,
+`summary` and links, and write about your project below the second `---`.
+Photos: `public/images/projects/first-project/cover.jpg` (+ any other photos in that
+folder become the gallery); the same for `final-project`.
+
 - To **add or remove a week**, add or delete a `week-XX.mdx` file — pages, the
   home page list and previous/next links update automatically.
 - Quote text values that contain a colon (`:`).
@@ -94,6 +114,7 @@ Photos saved under these names appear automatically — no file needs editing:
 | `public/images/weeks/week-05/cover.jpg` | Week 5 main photo and its card | 21:9 (4:3 on cards) |
 | `public/images/weeks/week-05/` *any other photo* | Week 5 gallery, sorted by file name | 4:3 |
 | `public/images/weeks/week-05/inline/…` | Photos placed inside the text with `<Figure>` | 4:3 |
+| `public/images/projects/first-project/cover.jpg` (and `final-project`) | Project page main photo and home page card; other photos in the folder → gallery | 21:9 / 16:10 |
 
 - `.jpg`, `.jpeg`, `.png`, `.webp` and `.avif` all work; Next.js resizes and
   compresses them. Photos are cropped to their frame, so keep the subject central.

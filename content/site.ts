@@ -28,7 +28,7 @@ export const site: SiteContent = {
   },
 
   reflection: {
-    title: "Reflection",
+    title: "Our attitude towards the course",
     paragraphs: [],
   },
 

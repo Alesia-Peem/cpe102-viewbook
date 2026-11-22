@@ -10,6 +10,7 @@ import type { ImageRef } from "@/types/content";
  *   public/images/team/member-1.jpg …         team portraits, in order
  *   public/images/weeks/week-05/cover.jpg     a week's main photograph
  *   public/images/weeks/week-05/*.jpg         every other photo in the folder → that week's gallery
+ *   public/images/projects/first-project/cover.jpg, *.jpg   the same for the two project pages
  *
  * .jpg, .jpeg, .png, .webp and .avif all work. A path written in the content files always wins.
  */
@@ -37,13 +38,16 @@ export function resolveImage(image?: ImageRef, fallbackPath?: string): ResolvedI
   return {};
 }
 
-/** Photos in a week's folder other than its cover, sorted by name (photo-2 before photo-10). */
-export function folderGallery(slug: string): ImageRef[] {
-  const dir = path.join(PUBLIC, "images", "weeks", slug);
+/**
+ * Photos in an image folder other than its cover, sorted by name (photo-2 before photo-10).
+ * `folder` is relative to public/images, e.g. "weeks/week-05" or "projects/first-project".
+ */
+export function folderGallery(folder: string): ImageRef[] {
+  const dir = path.join(PUBLIC, "images", folder);
   if (!fs.existsSync(dir)) return [];
   return fs
     .readdirSync(dir)
     .filter((f) => EXTENSIONS.includes(path.extname(f).toLowerCase()) && !/^cover\./i.test(f))
     .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
-    .map((f) => ({ src: `/images/weeks/${slug}/${f}` }));
+    .map((f) => ({ src: `/images/${folder}/${f}` }));
 }

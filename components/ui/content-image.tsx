@@ -18,6 +18,8 @@ type Props = {
   zoom?: boolean;
   /** Small frame: the placeholder hides the file path on phones. */
   compact?: boolean;
+  /** Thumbnail: the placeholder shows only its icon and label. */
+  tiny?: boolean;
   className?: string;
 };
 
@@ -25,7 +27,7 @@ type Props = {
  * A photograph in a fixed aspect-ratio frame, or a labelled placeholder naming the file to add.
  * Server component — the file check runs at build time (and on each request in `npm run dev`).
  */
-export function ContentImage({ image, fallbackPath, placeholderLabel, aspect = "aspect-[4/3]", sizes, priority, zoom = false, compact = false, className }: Props) {
+export function ContentImage({ image, fallbackPath, placeholderLabel, aspect = "aspect-[4/3]", sizes, priority, zoom = false, compact = false, tiny = false, className }: Props) {
   const { src, expected } = resolveImage(image, fallbackPath);
 
   return (
@@ -40,7 +42,7 @@ export function ContentImage({ image, fallbackPath, placeholderLabel, aspect = "
           className={cn("object-cover", zoom && "zoom-img")}
         />
       ) : (
-        <ImagePlaceholder label={placeholderLabel} file={expected} compact={compact} />
+        <ImagePlaceholder label={placeholderLabel} file={expected} compact={compact} tiny={tiny} />
       )}
     </div>
   );

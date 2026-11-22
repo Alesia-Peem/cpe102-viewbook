@@ -4,6 +4,8 @@ import { About } from "@/components/sections/about";
 import { WeekGrid } from "@/components/sections/week-grid";
 import { Reflection } from "@/components/sections/reflection";
 import { Team } from "@/components/sections/team";
+import { Projects } from "@/components/sections/projects";
+import { getProjects } from "@/lib/projects";
 import { Marquee } from "@/components/fx/marquee";
 import { padWeek } from "@/lib/utils";
 
@@ -25,6 +27,7 @@ export default function HomePage() {
       />
       <About />
       <WeekGrid weeks={weeks} />
+      <Projects projects={getProjects()} />
       <Reflection />
       <Team />
     </>

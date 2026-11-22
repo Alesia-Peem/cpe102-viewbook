@@ -21,7 +21,9 @@ function readWeek(file: string): Week {
     // YAML parses unquoted dates into Date objects; normalise to a string.
     date: fm.date ? toIsoDate(fm.date as unknown) : undefined,
     // No gallery listed in the file → use every photo in public/images/weeks/<slug>/ except the cover.
-    gallery: fm.gallery?.length ? fm.gallery : folderGallery(slug),
+    gallery: fm.gallery?.length ? fm.gallery : folderGallery(`weeks/${slug}`),
+    covered: fm.covered ?? [],
+    tools: fm.tools ?? [],
     videos: fm.videos ?? [],
     links: fm.links ?? [],
     slug,
@@ -48,10 +50,25 @@ export function getWeek(slug: string): Week | undefined {
   return getWeeks().find((w) => w.slug === slug);
 }
 
+/** Weeks grouped by semester phase, in the order of content/course.ts. */
+export function getWeeksByPhase<P extends { id: string }>(weeks: Week[], phases: ReadonlyArray<P>) {
+  return phases.map((p) => ({ phase: p, weeks: weeks.filter((w) => w.phase === p.id) })).filter((g) => g.weeks.length > 0);
+}
+
+/**
+ * True when the week's first class is after `now`. Evaluated when the site is built,
+ * so it stays correct as long as the site is rebuilt as the semester goes on.
+ */
+export function isUpcoming(week: Week, now = new Date()) {
+  if (!week.date) return false;
+  const d = new Date(`${week.date}T00:00:00+07:00`);
+  return !Number.isNaN(d.getTime()) && d.getTime() > now.getTime();
+}
+
 /** First and last dated week — derived from the files, never invented. */
 export function getDateRange(weeks: Week[]) {
   const dates = weeks
-    .map((w) => w.date)
+    .flatMap((w) => [w.date, w.endDate])
     .filter((d): d is string => !!d && !Number.isNaN(new Date(d).getTime()))
     .sort();
   return dates.length ? { start: dates[0], end: dates[dates.length - 1] } : undefined;

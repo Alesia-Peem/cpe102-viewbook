@@ -2,7 +2,7 @@ import { ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /** Fills an empty photo frame: what belongs here and the exact file to add. */
-export function ImagePlaceholder({ label, file, compact = false }: { label: string; file?: string; compact?: boolean }) {
+export function ImagePlaceholder({ label, file, compact = false, tiny = false }: { label: string; file?: string; compact?: boolean; tiny?: boolean }) {
   return (
     <div
       role="img"
@@ -11,9 +11,9 @@ export function ImagePlaceholder({ label, file, compact = false }: { label: stri
       className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 border border-dashed border-line-strong bg-surface p-3 text-center"
     >
       <ImageIcon aria-hidden className="size-5 text-muted" strokeWidth={1.5} />
-      <p className={cn("font-mono text-label uppercase text-muted", compact && "hidden sm:block")}>[Project image placeholder]</p>
+      <p className={cn("font-mono text-label uppercase text-muted", compact && "hidden sm:block", tiny && "hidden sm:hidden")}>[Project image placeholder]</p>
       <p className={cn("text-small font-medium leading-snug text-ink", compact && "text-label sm:text-small")}>{label}</p>
-      {file ? <p className={cn("max-w-full break-all font-mono text-label text-muted", compact && "hidden sm:block")}>{file}</p> : null}
+      {file && !tiny ? <p className={cn("max-w-full break-all font-mono text-label text-muted", compact && "hidden sm:block")}>{file}</p> : null}
     </div>
   );
 }

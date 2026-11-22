@@ -1,4 +1,5 @@
 import { site } from "@/content/site";
+import { course } from "@/content/course";
 import type { Week } from "@/types/content";
 import { getDateRange } from "@/lib/weeks";
 import { formatDateRange } from "@/lib/utils";
@@ -27,11 +28,14 @@ export function Hero({ weeks }: { weeks: Week[] }) {
       <Container className="relative z-10 flex min-h-[calc(100svh-4rem)] flex-col justify-center gap-10 py-12 lg:gap-12 lg:py-14">
         <div>
           <p className="enter font-mono text-label uppercase text-white/70" style={{ "--i": 0 } as React.CSSProperties}>
-            <span className="fx-shiny">A week-by-week journal</span>
+            <span className="fx-shiny">The {site.courseCode} Viewbook</span>
           </p>
           <h1 id="hero-title" className="mt-4 text-display font-semibold text-balance">
             {site.courseName ? <SplitWords text={site.courseName} /> : <TextPlaceholder inline label="Course name" />}
           </h1>
+          <p className="enter mt-5 font-mono text-label uppercase text-white/70" style={{ "--i": 2 } as React.CSSProperties}>
+            {course.universityShort} · {course.department} · {course.semester}
+          </p>
         </div>
 
         <div className="grid gap-10 lg:grid-cols-12">
@@ -45,8 +49,10 @@ export function Hero({ weeks }: { weeks: Week[] }) {
                 onDark
                 rows={[
                   { label: "Course", value: site.courseCode },
+                  { label: "Semester", value: "1/2569 (2026)" },
                   { label: "Team", value: site.groupName || <TextPlaceholder inline label="Team" className="text-white/70" /> },
                   { label: "Length", value: <><NumberTicker value={weeks.length} /> weeks</> },
+                  { label: "Lab", value: `Room ${course.labRoom}` },
                   { label: "Period", value: range ? formatDateRange(range.start, range.end) : <TextPlaceholder inline label="Dates" className="text-white/70" /> },
                 ]}
               />

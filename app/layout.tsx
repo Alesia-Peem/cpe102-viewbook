@@ -14,9 +14,9 @@ const code = JetBrains_Mono({ subsets: ["latin"], variable: "--font-code", displ
 // only when a page actually contains Thai characters.
 const thai = Anuphan({ subsets: ["thai"], variable: "--font-thai", display: "swap", preload: false });
 
-const siteTitle = [site.courseCode, site.courseName].filter(Boolean).join(" — ");
+const siteTitle = `${site.courseCode} Viewbook — ${site.courseName}`;
 const description =
-  site.tagline || `${site.courseCode} ${site.courseName ?? ""} — a week-by-week journal${site.groupName ? ` by ${site.groupName}` : ""}.`;
+  site.tagline || `The ${site.courseCode} ${site.courseName ?? ""} viewbook${site.groupName ? ` by ${site.groupName}` : ""}: the course week by week, our two projects and what we think of it.`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.siteUrl),
