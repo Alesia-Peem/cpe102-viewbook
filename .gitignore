@@ -36,3 +36,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# third-party agent skills (restore with: npx skills experimental_install)
+/.claude/skills/
+/.agents/
+.taste-skill/
