@@ -1,6 +1,6 @@
-# CPE102 — Weekly Learning Journal
+# CPE102 Engineering Exploration — Team D01
 
-A week-by-week journal website for the CPE102 course, built with Next.js.
+A week-by-week journal website for the CPE102 Engineering Exploration course by Team D01, built with Next.js.
 Each week of the semester has its own page; the home page introduces the
 course, lists every week, and presents the reflection and team.
 

@@ -12,8 +12,8 @@ import type { SiteContent } from "@/types/content";
  */
 export const site: SiteContent = {
   courseCode: "CPE102",
-  courseName: "",
-  groupName: "",
+  courseName: "Engineering Exploration",
+  groupName: "Team D01",
   tagline: "",
 
   heroImage: {
