@@ -1,19 +1,22 @@
 @import "tailwindcss";
 
 /*
- * Design tokens — navy for text and structure, one signal-orange accent.
- * Use as Tailwind classes, e.g. text-ink, bg-deep, border-line, text-accent.
+ * COLOUR — one temperature (warm "drafting paper" neutrals), navy ink, one orange accent.
+ * Contrast on white: ink 17.4, navy 10.8, muted 6.9, accent-text 5.5 (AA for small text).
+ * accent (3.1:1) is for large type and marks only — never small text.
+ * Classes: text-ink, bg-deep, border-line, text-accent-text, …
  */
 @theme {
-  --color-ink: #0f1b2a;          /* headings, primary text */
-  --color-navy: #163f66;         /* links, secondary emphasis */
-  --color-deep: #0c2238;         /* dark bands: reflection, footer */
-  --color-accent: #f2662b;       /* small highlights only — never body text on white */
-  --color-muted: #566070;        /* secondary text */
-  --color-line: #e2e4e8;         /* hairlines */
-  --color-line-strong: #c4c9d1;  /* outlines, hovered borders */
-  --color-surface: #f4f3ef;      /* subtle backgrounds, placeholders */
-  --color-paper: #ffffff;
+  --color-ink: #0f1b2a;          /* headings and body text */
+  --color-navy: #163f66;         /* links, hover fills */
+  --color-deep: #0c2238;         /* the dark band and the footer */
+  --color-accent: #f2662b;       /* week numerals, small marks, focus ring */
+  --color-accent-text: #b5441a;  /* orange text at small sizes */
+  --color-muted: #5d5a52;        /* secondary text */
+  --color-line: #e5e2da;         /* hairlines */
+  --color-line-strong: #cbc6ba;  /* outlines, placeholder borders */
+  --color-surface: #f4f2ed;      /* quiet section ground, empty photo frames */
+  --color-paper: #ffffff;        /* page ground */
 
   --font-sans: var(--font-display), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-code), ui-monospace, monospace;
