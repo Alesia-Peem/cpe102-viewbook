@@ -1,0 +1,223 @@
+/*
+ * /journal — chapter details that Tailwind utilities can't express cleanly:
+ * printer's crop marks, the blueprint grid inside empty photo frames, ruled "write here" fields,
+ * outlined poster type, and the motion fallbacks (no JavaScript / reduced motion).
+ * Colours come from the theme variables in app/globals.css; marks use currentColor so each
+ * chapter ground (paper, surface, yellow, deep) tints them through a text colour class.
+ */
+@layer components {
+  /* ── Crop marks: four 0×0 anchors at a frame's corners; each draws two short ticks outside it. ── */
+  .jr-crop {
+    --jr-crop-len: 9px;
+    --jr-crop-gap: 4px;
+    position: absolute;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+  @media (min-width: 640px) {
+    .jr-crop {
+      --jr-crop-len: 14px;
+      --jr-crop-gap: 6px;
+    }
+  }
+  .jr-crop::before,
+  .jr-crop::after {
+    content: "";
+    position: absolute;
+    background: currentColor;
+  }
+  .jr-crop::before {
+    width: var(--jr-crop-len);
+    height: 1px;
+  }
+  .jr-crop::after {
+    width: 1px;
+    height: var(--jr-crop-len);
+  }
+  .jr-crop--tl {
+    left: 0;
+    top: 0;
+  }
+  .jr-crop--tl::before {
+    right: var(--jr-crop-gap);
+    top: 0;
+  }
+  .jr-crop--tl::after {
+    bottom: var(--jr-crop-gap);
+    left: 0;
+  }
+  .jr-crop--tr {
+    right: 0;
+    top: 0;
+  }
+  .jr-crop--tr::before {
+    left: var(--jr-crop-gap);
+    top: 0;
+  }
+  .jr-crop--tr::after {
+    bottom: var(--jr-crop-gap);
+    left: -1px;
+  }
+  .jr-crop--bl {
+    left: 0;
+    bottom: 0;
+  }
+  .jr-crop--bl::before {
+    right: var(--jr-crop-gap);
+    top: -1px;
+  }
+  .jr-crop--bl::after {
+    top: var(--jr-crop-gap);
+    left: 0;
+  }
+  .jr-crop--br {
+    right: 0;
+    bottom: 0;
+  }
+  .jr-crop--br::before {
+    left: var(--jr-crop-gap);
+    top: -1px;
+  }
+  .jr-crop--br::after {
+    top: var(--jr-crop-gap);
+    left: -1px;
+  }
+
+  /* ── Blueprint grid inside an empty frame (tinted by the frame's text colour). ── */
+  .jr-grid {
+    background-image:
+      linear-gradient(to right, color-mix(in srgb, currentColor 45%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in srgb, currentColor 45%, transparent) 1px, transparent 1px);
+    background-size: 2rem 2rem;
+    background-position: -1px -1px;
+  }
+
+  /* ── Film-edge perforations along an empty frame (contact-sheet feel). ── */
+  .jr-perf {
+    height: 0.5rem;
+    background-image: linear-gradient(to right, currentColor 0 0.5rem, transparent 0.5rem);
+    background-size: 1.25rem 100%;
+    opacity: 0.55;
+  }
+
+  /* ── Ruled lines: an empty "write here" field in the notebook. ── */
+  .jr-ruled {
+    background-image: linear-gradient(to bottom, transparent calc(100% - 1px), color-mix(in srgb, currentColor 22%, transparent) calc(100% - 1px));
+    background-size: 100% 2rem;
+  }
+
+  /* ── Outlined poster type (phase titles). ── */
+  .jr-outline {
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 1.5px currentColor;
+  }
+
+  /* ── Photo frames: zoom a touch on hover; the "open" tag slides in. ── */
+  .jr-photo-img {
+    transition: transform 700ms var(--ease-out-ui);
+  }
+  .jr-open-tag {
+    opacity: 0;
+    transform: translateY(6px);
+    transition:
+      opacity 200ms var(--ease-out-ui),
+      transform 200ms var(--ease-out-ui);
+  }
+  .jr-trigger:focus-visible .jr-open-tag {
+    opacity: 1;
+    transform: none;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .jr-trigger:hover .jr-photo-img {
+      transform: scale(1.03);
+    }
+    .jr-trigger:hover .jr-open-tag {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  /* Touch screens: show the tag so people know the photo opens. */
+  @media (hover: none) {
+    .jr-open-tag {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* ── Index cells in the intro. ── */
+  .jr-index-cell {
+    transition:
+      background-color 200ms var(--ease-out-ui),
+      color 200ms var(--ease-out-ui);
+  }
+  .jr-index-cell .jr-index-num {
+    transition: transform 300ms var(--ease-out-ui);
+  }
+  .jr-index-sub {
+    color: color-mix(in srgb, currentColor 78%, transparent);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .jr-index-cell:hover {
+      background-color: var(--color-ink);
+      color: #fff;
+    }
+    .jr-index-cell:hover .jr-index-num {
+      transform: translateY(-4px);
+    }
+  }
+
+  /* ── Prev / next week controls. ── */
+  .jr-pager-link .jr-pager-arrow {
+    transition: transform 200ms var(--ease-out-ui);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .jr-pager-link:hover .jr-pager-arrow--prev {
+      transform: translateX(-4px);
+    }
+    .jr-pager-link:hover .jr-pager-arrow--next {
+      transform: translateX(4px);
+    }
+    .jr-pager-link:hover .jr-pager-title {
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 6px;
+    }
+  }
+}
+
+/*
+ * Motion fallbacks. Photos open from a clipped inset (Motion sets the clip inline); without
+ * JavaScript or with reduced motion they are simply shown, and the parallax layer rests.
+ * Unlayered + !important so they beat Motion's inline styles.
+ */
+@media (scripting: none) {
+  .jr-clip {
+    clip-path: none !important;
+  }
+  .jr-mask > * {
+    transform: none !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .jr-clip {
+    clip-path: none !important;
+  }
+  .jr-parallax {
+    transform: none !important;
+    inset: 0 !important;
+  }
+  .jr-mask > * {
+    transform: none !important;
+  }
+  .jr-photo-img,
+  .jr-index-cell .jr-index-num,
+  .jr-pager-link .jr-pager-arrow {
+    transition: none;
+  }
+}
+
+/* Photo buttons sit inside clipped frames: draw their focus ring inside the frame so it stays visible. */
+.jr-trigger:focus-visible {
+  outline-offset: -6px;
+}

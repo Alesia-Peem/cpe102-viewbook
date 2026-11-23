@@ -1,7 +1,7 @@
 # Course materials → where they belong
 
 The files in `Downloads/CPE102` were used as the **source** for the course facts on the
-site (`content/course.ts`, the `covered` / `tools` lists in each week file, and the two
+site (`content/course.ts`, the `covered` / `tools` lists in `data/syllabus.ts`, and the two
 project files). They are **not** published: they are the instructors' material, some are
 large (AI & ML is 52 MB), and a public viewbook should link to them only with permission.
 

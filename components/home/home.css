@@ -1,0 +1,215 @@
+/*
+ * HOME + SITE SHELL — "lab poster meets field notebook".
+ * Imported by the header (so it loads on every page) and by the home page.
+ * Theme variables are given fallbacks: Tailwind only emits the ones utilities use.
+ */
+@layer components {
+  /* ── Poster type ─────────────────────────────────────────── */
+
+  /* The hero headline: the mega size, but never wider than the screen allows for an 11-letter word. */
+  .poster-fit {
+    font-size: min(var(--text-mega, clamp(4.5rem, 16vw, 15.5rem)), calc((100vw - 2rem) / 5.4));
+    line-height: 0.84;
+    letter-spacing: -0.005em;
+  }
+
+  /* One line of a poster headline, masked so the words can rise into place. */
+  .line-mask {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.05em;
+    margin-bottom: -0.05em;
+  }
+  .line-mask > span {
+    display: block;
+  }
+
+  /* ── Chapter strip: the running header of each chapter ───── */
+  .chapter-rule {
+    flex: 1 1 0%;
+    height: 2px;
+    min-width: 1.5rem;
+    background: currentColor;
+  }
+
+  /* ── Empty photo frames: hatched card stock with crop marks ─ */
+  .frame-hatch {
+    background-color: var(--color-surface, #ece6d8);
+    background-image: repeating-linear-gradient(135deg, rgb(15 27 42 / 0.07) 0 1px, transparent 1px 11px);
+  }
+  .frame-hatch-dark {
+    background-color: rgb(255 255 255 / 0.04);
+    background-image: repeating-linear-gradient(135deg, rgb(255 255 255 / 0.08) 0 1px, transparent 1px 11px);
+  }
+  .frame-hatch-yellow {
+    background-color: #f9d559;
+    background-image: repeating-linear-gradient(135deg, rgb(15 27 42 / 0.1) 0 1px, transparent 1px 11px);
+  }
+  .crop {
+    position: absolute;
+    width: 0.875rem;
+    height: 0.875rem;
+    pointer-events: none;
+  }
+  .crop-tl {
+    top: 0.5rem;
+    left: 0.5rem;
+    border-top: 1.5px solid currentColor;
+    border-left: 1.5px solid currentColor;
+  }
+  .crop-tr {
+    top: 0.5rem;
+    right: 0.5rem;
+    border-top: 1.5px solid currentColor;
+    border-right: 1.5px solid currentColor;
+  }
+  .crop-bl {
+    bottom: 0.5rem;
+    left: 0.5rem;
+    border-bottom: 1.5px solid currentColor;
+    border-left: 1.5px solid currentColor;
+  }
+  .crop-br {
+    bottom: 0.5rem;
+    right: 0.5rem;
+    border-bottom: 1.5px solid currentColor;
+    border-right: 1.5px solid currentColor;
+  }
+
+  /* Masking tape holding a print to the page. */
+  .tape {
+    position: absolute;
+    z-index: 2;
+    width: 5.5rem;
+    height: 1.625rem;
+    background: rgb(246 243 236 / 0.82);
+    box-shadow: 0 1px 2px rgb(15 27 42 / 0.12);
+    pointer-events: none;
+  }
+
+  /* A printed photograph: white border and a hard paper shadow. */
+  .print {
+    background: #fff;
+    padding: 0.5rem;
+    box-shadow: 0 1px 0 rgb(15 27 42 / 0.08), 0 24px 40px -24px rgb(15 27 42 / 0.45);
+  }
+
+  /* Notebook paper: ruled lines and an orange margin line. */
+  .ruled {
+    background-color: var(--color-paper, #f6f3ec);
+    background-image:
+      linear-gradient(to right, transparent 2.75rem, rgb(242 102 43 / 0.55) 2.75rem, rgb(242 102 43 / 0.55) calc(2.75rem + 1px), transparent calc(2.75rem + 1px)),
+      repeating-linear-gradient(to bottom, transparent 0 calc(2rem - 1px), rgb(15 27 42 / 0.13) calc(2rem - 1px) 2rem);
+  }
+
+  /* ── Header navigation numbers (decorative; hidden from screen readers) ── */
+  .nav-num::before {
+    content: attr(data-n);
+    content: attr(data-n) / "";
+    margin-right: 0.375rem;
+    color: var(--color-accent-text, #b5441a);
+  }
+
+  /* ── The weeks rail: a horizontal scroller aligned to the page's content edge ── */
+  .rail {
+    --gutter: 1rem;
+    padding-inline: max(var(--gutter), calc((100% - 80rem) / 2 + var(--gutter)));
+    scroll-padding-inline: max(var(--gutter), calc((100% - 80rem) / 2 + var(--gutter)));
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+  .rail::-webkit-scrollbar {
+    display: none;
+  }
+  @media (min-width: 640px) {
+    .rail {
+      --gutter: 1.5rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .rail {
+      --gutter: 2.5rem;
+    }
+  }
+
+  /* Big link bars (journal call to action): the arrow slides on hover. */
+  .bar-link .bar-arrow {
+    transition: transform 200ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .bar-link:hover .bar-arrow {
+      transform: translateX(6px);
+    }
+  }
+}
+
+/* ── Entrances (off under reduced motion) ─────────────────────── */
+@media (prefers-reduced-motion: no-preference) {
+  /* Poster lines rise out of their mask on load. */
+  .line-up {
+    animation: home-line-up 1000ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    animation-delay: calc(80ms + var(--i, 0) * 120ms);
+  }
+  /* The lead photograph is uncovered from the bottom edge up. */
+  .clip-up {
+    animation: home-clip-up 1300ms cubic-bezier(0.65, 0, 0.2, 1) both;
+    animation-delay: 380ms;
+  }
+  /* Tape and captions land after the print. */
+  .land {
+    animation: home-land 600ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    animation-delay: calc(1100ms + var(--i, 0) * 120ms);
+  }
+}
+@keyframes home-line-up {
+  from {
+    transform: translateY(105%);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes home-clip-up {
+  from {
+    clip-path: inset(100% 0 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes home-land {
+  from {
+    opacity: 0;
+    translate: 0 -10px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+/* The hero photograph climbs behind the second line of the headline (desktop). */
+@media (min-width: 1024px) {
+  .hero-pull {
+    margin-top: calc(min(var(--text-mega, clamp(4.5rem, 16vw, 15.5rem)), calc((100vw - 2rem) / 5.4)) * -0.42 - 2.5rem);
+  }
+}
+
+/* Scroll-linked depth rests under reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  .parallax {
+    transform: none !important;
+  }
+}
+
+/* On yellow grounds the orange focus ring is too faint: draw it in ink instead. */
+.focus-ink :focus-visible,
+.focus-ink:focus-visible {
+  outline-color: #0f1b2a;
+}
+
+/* "Back to top" moves focus to <main>; no ring around the whole page. */
+main[tabindex="-1"]:focus,
+main[tabindex="-1"]:focus-visible {
+  outline: none;
+}

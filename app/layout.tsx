@@ -10,7 +10,14 @@ import { ScrollProgress } from "@/components/fx/scroll-progress";
 // Fonts are downloaded at build time and served from this site (no request to Google at runtime).
 const display = Schibsted_Grotesk({ subsets: ["latin"], variable: "--font-display", display: "swap" });
 // Condensed display face for poster headlines and week numbers.
-const poster = Big_Shoulders({ subsets: ["latin"], variable: "--font-poster-face", display: "swap" });
+const poster = Big_Shoulders({
+  subsets: ["latin"],
+  variable: "--font-poster-face",
+  display: "swap",
+  // Next.js has no metrics for this face, so use a narrow system font while it loads.
+  adjustFontFallback: false,
+  fallback: ["Arial Narrow", "Arial", "sans-serif"],
+});
 const code = JetBrains_Mono({ subsets: ["latin"], variable: "--font-code", display: "swap" });
 // Thai text (from thaiwebfonts' free list). Thai-only subset, not preloaded: the browser fetches it
 // only when a page actually contains Thai characters.

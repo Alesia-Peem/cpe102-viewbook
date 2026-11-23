@@ -22,15 +22,14 @@ export function TiltCard({ children, className, max = 7 }: { children: React.Rea
   const glare = useMotionTemplate`radial-gradient(420px circle at ${gx} ${gy}, rgb(255 255 255 / 0.22), transparent 50%)`;
   const glareOpacity = useSpring(0, spring);
 
-  if (reduce) return <div className={className}>{children}</div>;
-
+  // Same element tree on server and client (no hydration mismatch); reduced motion just never tilts.
   return (
     <m.div
       ref={ref}
       className={cn("relative [transform-style:preserve-3d]", className)}
       style={{ rotateX, rotateY, transformPerspective: 1000 }}
       onPointerMove={(e) => {
-        if (e.pointerType !== "mouse" || !ref.current) return;
+        if (reduce || e.pointerType !== "mouse" || !ref.current) return;
         const r = ref.current.getBoundingClientRect();
         px.set((e.clientX - r.left) / r.width);
         py.set((e.clientY - r.top) / r.height);
