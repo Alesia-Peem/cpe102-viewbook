@@ -1,0 +1,7 @@
+# Keep local-only material out of Vercel uploads (mirrors .gitignore)
+.claude
+.agents
+.taste-skill
+node_modules
+.next
+.env*
