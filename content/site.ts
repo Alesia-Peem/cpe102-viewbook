@@ -1,46 +1,34 @@
 import type { SiteContent } from "@/types/content";
+import { projectContent as own } from "@/data/project";
 
 /**
- * ─────────────────────────────────────────────────────────────
- *  SITE CONTENT — edit this file to change the home page text.
- * ─────────────────────────────────────────────────────────────
- *  • Leave a value as "" (empty) and the site shows a labelled
- *    placeholder instead, so nothing ever looks broken.
+ * Site settings and the home page text.
+ *  • Your own text (tagline, about, reflection, team) is written in data/project.ts —
+ *    this file only passes it on. The weekly journal is data/weeks.ts.
  *  • Image paths point inside the /public folder,
  *    e.g. "/images/hero/main.jpg"  →  public/images/hero/main.jpg
- *  • Each week's content lives in /content/weeks/week-XX.mdx
  */
 export const site: SiteContent = {
   courseCode: "CPE102",
   courseName: "Engineering Exploration",
   groupName: "Team D01",
-  tagline: "",
+  tagline: own.tagline,
 
-  heroImage: {
-    src: "",
-    alt: "Main project photograph",
-  },
+  heroImage: { src: own.heroPhoto, alt: "Main project photograph" },
 
   about: {
-    // One string per paragraph.
-    paragraphs: [],
-    image: { src: "", alt: "About the course photograph" },
+    paragraphs: own.about.paragraphs,
+    image: { src: own.about.photo, alt: "About the course photograph" },
   },
 
   reflection: {
     title: "Our attitude towards the course",
-    paragraphs: [],
+    paragraphs: own.reflection.paragraphs,
   },
 
   team: {
     title: "Team members",
-    // Add, remove or edit members. Empty fields show placeholders.
-    members: [
-      { name: "", detail: "", photo: { src: "" } },
-      { name: "", detail: "", photo: { src: "" } },
-      { name: "", detail: "", photo: { src: "" } },
-      { name: "", detail: "", photo: { src: "" } },
-    ],
+    members: own.team.map((m) => ({ name: m.name, detail: m.detail, photo: { src: m.photo } })),
   },
 
   // The public address. On Vercel it is filled in automatically from the production domain;

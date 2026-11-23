@@ -1,7 +1,7 @@
 import fs from "node:fs";
 
 /**
- * Reads the pixel size of a JPEG, PNG or WebP file from its header (no dependency).
+ * Reads the pixel size of a JPEG, PNG, WebP or AVIF file from its header (no dependency).
  * Returns undefined if the format is not recognised.
  */
 export function imageSize(file: string): { width: number; height: number } | undefined {
@@ -24,6 +24,18 @@ export function imageSize(file: string): { width: number; height: number } | und
       const b = buf.readUInt32LE(21);
       return { width: (b & 0x3fff) + 1, height: ((b >> 14) & 0x3fff) + 1 };
     }
+  }
+  // AVIF (ISO-BMFF): the largest 'ispe' box is the primary image; 'irot' 1 or 3 means it is shown turned 90°
+  if (buf.length > 12 && buf.toString("ascii", 4, 8) === "ftyp" && /avi[fs]|mif1/.test(buf.toString("ascii", 8, 32))) {
+    const head = buf.subarray(0, Math.min(buf.length, 1 << 16));
+    let best: { width: number; height: number } | undefined;
+    for (let at = head.indexOf("ispe"); at >= 0 && at + 16 <= head.length; at = head.indexOf("ispe", at + 4)) {
+      const size = { width: head.readUInt32BE(at + 8), height: head.readUInt32BE(at + 12) };
+      if (!best || size.width * size.height > best.width * best.height) best = size;
+    }
+    const rot = head.indexOf("irot");
+    const turned = rot >= 0 && rot + 4 < head.length && (head[rot + 4] & 1) === 1;
+    if (best) return turned ? { width: best.height, height: best.width } : best;
   }
   // JPEG: walk segments to a start-of-frame marker, noting the EXIF orientation on the way
   if (buf[0] === 0xff && buf[1] === 0xd8) {

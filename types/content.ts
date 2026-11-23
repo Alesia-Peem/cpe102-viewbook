@@ -98,6 +98,33 @@ export type SiteContent = {
   siteUrl: string;
 };
 
+/** Your own write-up for one of the two course projects (data/project.ts). */
+export type ProjectEntry = {
+  /** Your project's own name (your robot's name, your final project's title). */
+  title: string;
+  /** One sentence about it. */
+  summary: string;
+  /** The full write-up. Separate paragraphs with a blank line ("\n\n"). */
+  description: string;
+  /** Photo paths inside /public. The first is the cover, the rest the gallery. Empty → the folder is used. */
+  photos: string[];
+  /** One caption per photo, same order. Optional. */
+  captions: string[];
+  videos: VideoRef[];
+  links: LinkRef[];
+};
+
+/** Everything you write about the project outside the weekly journal (data/project.ts). */
+export type ProjectContent = {
+  tagline: string;
+  heroPhoto: string;
+  about: { paragraphs: string[]; photo: string };
+  reflection: { paragraphs: string[] };
+  team: Array<{ name: string; detail: string; photo: string }>;
+  firstProject: ProjectEntry;
+  finalProject: ProjectEntry;
+};
+
 export type ScoreItem = { label: string; points: number; detail?: string };
 export type ScheduleItem = { label: string; time: string };
 
@@ -128,4 +155,10 @@ export type ProjectFrontmatter = {
   links?: LinkRef[];
 };
 
-export type Project = ProjectFrontmatter & { slug: string; body: string };
+export type Project = ProjectFrontmatter & {
+  slug: string;
+  /** MDX body of the project file (optional; data/project.ts is the usual place to write). */
+  body: string;
+  /** The user's write-up from data/project.ts; paragraphs separated by a blank line. */
+  description?: string;
+};

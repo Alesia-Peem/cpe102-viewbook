@@ -48,7 +48,7 @@ export function Reflection() {
                   <p className="font-mono text-label uppercase text-accent-text">[Reflection not yet written]</p>
                   <p className="mt-4 text-h3 font-semibold leading-[2rem]">What we think of the course — what worked, what was hard, and what we would tell next year&apos;s students.</p>
                   <p className="mt-6 text-small leading-[2rem] text-muted">
-                    The first paragraph is set large here. Edit <code className="font-mono text-label text-ink">content/site.ts → reflection.paragraphs</code>
+                    The first paragraph is set large here. Edit <code className="font-mono text-label text-ink">data/project.ts → reflection.paragraphs</code>
                   </p>
                 </div>
               </Reveal>

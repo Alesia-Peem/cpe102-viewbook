@@ -57,7 +57,7 @@ export function About() {
                 <div className="mt-3 border-l-2 border-dashed border-line-strong py-1 pl-4">
                   <p className="font-mono text-label uppercase text-muted">[Not yet written]</p>
                   <p className="mt-1 text-small text-ink">The course in our own words (optional).</p>
-                  <p className="mt-0.5 font-mono text-label text-muted">Edit: content/site.ts → about.paragraphs</p>
+                  <p className="mt-0.5 font-mono text-label text-muted">Edit: data/project.ts → about.paragraphs</p>
                 </div>
               )}
             </Reveal>

@@ -4,7 +4,7 @@
  * ─────────────────────────────────────────────────────────────
  *  Source: "1_2026_syllabus_CPE 102 Engineering Exploration.pdf" (semester 1/2569)
  *  and the First Project details. Keep this file factual; your own writing goes in
- *  content/site.ts, content/weeks/*.mdx and content/projects/*.mdx.
+ *  data/project.ts and data/weeks.ts.
  */
 
 export const course = {

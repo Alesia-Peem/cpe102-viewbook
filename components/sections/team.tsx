@@ -67,7 +67,7 @@ export function Team() {
           ))}
         </ul>
         {members.some((m) => !m.name) ? (
-          <p className="mt-12 font-mono text-label text-muted md:mt-14">Names and roles: content/site.ts → team.members · portraits: public/images/team/member-1.jpg …</p>
+          <p className="mt-12 font-mono text-label text-muted md:mt-14">Names and roles: data/project.ts → team · portraits: public/images/team/member-1.jpg …</p>
         ) : null}
       </Container>
     </section>

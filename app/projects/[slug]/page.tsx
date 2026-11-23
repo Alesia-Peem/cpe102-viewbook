@@ -203,13 +203,21 @@ export default async function ProjectPage({ params }: Props) {
             {p.ourTitle || "What we built"}
           </h2>
           <div className="mt-8 max-w-3xl">
-            {p.body ? (
+            {p.description ? (
+              <div className="space-y-5 text-body text-ink">
+                {p.description.split(/\n\s*\n/).map((para, i) => (
+                  <p key={i} className="whitespace-pre-line">
+                    {para.trim()}
+                  </p>
+                ))}
+              </div>
+            ) : p.body ? (
               <MdxContent source={p.body} />
             ) : (
               <div className="border-l-2 border-ink py-1 pl-4 text-ink">
-                <p className="font-mono text-label uppercase">[Not yet written]</p>
+                <p className="font-mono text-label uppercase">[Project description — to be provided]</p>
                 <p className="mt-1 text-body">Our project: the idea, how we built it, what worked and what we would change.</p>
-                <p className="mt-1 font-mono text-label">Edit: content/projects/{slug}.mdx (below the second ---)</p>
+                <p className="mt-1 font-mono text-label">Edit: data/project.ts → {slug === "first-project" ? "firstProject" : "finalProject"}.description</p>
               </div>
             )}
           </div>
