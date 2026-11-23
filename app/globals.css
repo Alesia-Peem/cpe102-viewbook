@@ -1,27 +1,38 @@
 @import "tailwindcss";
 
 /*
- * COLOUR — one temperature (warm "drafting paper" neutrals), navy ink, one orange accent.
- * Contrast on white: ink 17.4, navy 10.8, muted 6.9, accent-text 5.5 (AA for small text).
- * accent (3.1:1) is for large type and marks only — never small text.
- * Classes: text-ink, bg-deep, border-line, text-accent-text, …
+ * COLOUR — "lab poster": ink navy, hard-hat yellow, signal orange, on warm paper.
+ * Contrast (measured): ink on paper 15.7 · ink on yellow 10.5 · muted on paper 6.2 · accent-text on paper 5.0 ·
+ * yellow on deep 10.6 · orange on deep 5.6 · ink on orange 5.5.
+ * accent (2.8:1 on paper) is for large type, marks and fills only — never small text on light grounds.
  */
 @theme {
-  --color-ink: #0f1b2a;          /* headings and body text */
-  --color-navy: #163f66;         /* links, hover fills */
-  --color-deep: #0c2238;         /* the dark band and the footer */
-  --color-accent: #f2662b;       /* week numerals, small marks, focus ring */
-  --color-accent-text: #b5441a;  /* orange text at small sizes */
+  /* Semantic tokens (use these in new components) */
+  --color-primary: #0f1b2a;      /* ink navy — text, dark chapters' type */
+  --color-secondary: #f6c21c;    /* hard-hat yellow — poster chapters */
+  --color-background: #f6f3ec;   /* warm paper — page ground */
+  --color-surface: #ece6d8;      /* quiet panels, empty photo frames */
+  --color-text: #0f1b2a;
   --color-muted: #5d5a52;        /* secondary text */
-  --color-line: #e5e2da;         /* hairlines */
-  --color-line-strong: #cbc6ba;  /* outlines, placeholder borders */
-  --color-surface: #f4f2ed;      /* quiet section ground, empty photo frames */
-  --color-paper: #ffffff;        /* page ground */
-  --color-sky: #38b6ff;          /* second glow colour (from the reference site) — effects only */
+  --color-accent: #f2662b;       /* signal orange — marks, numerals, fills */
+  --color-border: #d9d2c2;       /* hairlines */
+
+  /* Established names (kept so existing components keep working) */
+  --color-ink: #0f1b2a;
+  --color-navy: #163f66;         /* links */
+  --color-deep: #0c1a2b;         /* dark immersive chapters, footer */
+  --color-yellow: #f6c21c;
+  --color-accent-text: #b5441a;  /* orange text at small sizes on light grounds */
+  --color-line: #d9d2c2;
+  --color-line-strong: #bfb6a3;
+  --color-paper: #f6f3ec;
+  --color-sky: #38b6ff;          /* rare second glow colour (effects only) */
 
   /* Thai characters fall through to Anuphan (Latin stays Schibsted Grotesk). */
   --font-sans: var(--font-display), var(--font-thai), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-code), var(--font-thai), ui-monospace, monospace;
+  /* Condensed industrial display face for posters, week numbers and chapter titles. */
+  --font-poster: var(--font-poster-face), var(--font-display), var(--font-thai), "Arial Narrow", sans-serif;
 
   /*
    * TYPE SCALE — the only sizes the site uses. Classes: text-display, text-numeral,
@@ -35,6 +46,12 @@
   --text-numeral: clamp(4.5rem, 13vw, 10.5rem);     /* the week number on a week page */
   --text-numeral--line-height: 0.8;
   --text-numeral--letter-spacing: -0.06em;
+  --text-mega: clamp(4.5rem, 16vw, 15.5rem);         /* poster headline (font-poster, uppercase) */
+  --text-mega--line-height: 0.82;
+  --text-mega--letter-spacing: -0.01em;
+  --text-poster: clamp(3rem, 8.5vw, 8.5rem);          /* chapter titles (font-poster, uppercase) */
+  --text-poster--line-height: 0.86;
+  --text-poster--letter-spacing: -0.005em;
   --text-h1: clamp(2.375rem, 5vw, 4rem);            /* week titles */
   --text-h1--line-height: 1.02;
   --text-h1--letter-spacing: -0.04em;

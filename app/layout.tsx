@@ -1,6 +1,6 @@
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
-import { Anuphan, JetBrains_Mono, Schibsted_Grotesk } from "next/font/google";
+import { Anuphan, Big_Shoulders, JetBrains_Mono, Schibsted_Grotesk } from "next/font/google";
 import { site } from "@/content/site";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
@@ -9,6 +9,8 @@ import { ScrollProgress } from "@/components/fx/scroll-progress";
 
 // Fonts are downloaded at build time and served from this site (no request to Google at runtime).
 const display = Schibsted_Grotesk({ subsets: ["latin"], variable: "--font-display", display: "swap" });
+// Condensed display face for poster headlines and week numbers.
+const poster = Big_Shoulders({ subsets: ["latin"], variable: "--font-poster-face", display: "swap" });
 const code = JetBrains_Mono({ subsets: ["latin"], variable: "--font-code", display: "swap" });
 // Thai text (from thaiwebfonts' free list). Thai-only subset, not preloaded: the browser fetches it
 // only when a page actually contains Thai characters.
@@ -26,12 +28,12 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#ffffff",
+  themeColor: "#f6f3ec",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${display.variable} ${code.variable} ${thai.variable}`}>
+    <html lang="en" className={`${display.variable} ${poster.variable} ${code.variable} ${thai.variable}`}>
       <head>
         {/* Without JavaScript, scroll reveals never run — show their content straight away. */}
         <noscript>

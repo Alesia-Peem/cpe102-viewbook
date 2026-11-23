@@ -1,49 +1,36 @@
-import fs from "node:fs";
-import path from "node:path";
-import matter from "gray-matter";
-import type { Week, WeekFrontmatter } from "@/types/content";
-import { folderGallery } from "@/lib/images";
+import type { Week } from "@/types/content";
+import { getJournalWeeks } from "@/lib/journal";
 
-const WEEKS_DIR = path.join(process.cwd(), "content", "weeks");
-
-function readWeek(file: string): Week {
-  const raw = fs.readFileSync(path.join(WEEKS_DIR, file), "utf-8");
-  const { data, content } = matter(raw);
-  const fm = data as Partial<WeekFrontmatter>;
-  const slug = path.basename(file, path.extname(file));
-
-  // Fallback: derive the week number from the file name (week-07 → 7).
-  const fromName = Number(slug.match(/\d+/)?.[0] ?? NaN);
-
-  return {
-    ...fm,
-    week: typeof fm.week === "number" ? fm.week : fromName,
-    // YAML parses unquoted dates into Date objects; normalise to a string.
-    date: fm.date ? toIsoDate(fm.date as unknown) : undefined,
-    // No gallery listed in the file → use every photo in public/images/weeks/<slug>/ except the cover.
-    gallery: fm.gallery?.length ? fm.gallery : folderGallery(`weeks/${slug}`),
-    covered: fm.covered ?? [],
-    tools: fm.tools ?? [],
-    videos: fm.videos ?? [],
-    links: fm.links ?? [],
-    slug,
-    body: content.trim(),
-  };
-}
-
-function toIsoDate(value: unknown): string {
-  if (value instanceof Date) return value.toISOString().slice(0, 10);
-  return String(value);
-}
-
-/** All weeks, sorted by week number. Read at build time. */
+/**
+ * All weeks in the shape the week pages and cards use, built from the journal data
+ * (data/syllabus.ts + data/weeks.ts). Read at build time.
+ */
 export function getWeeks(): Week[] {
-  if (!fs.existsSync(WEEKS_DIR)) return [];
-  return fs
-    .readdirSync(WEEKS_DIR)
-    .filter((f) => f.endsWith(".mdx"))
-    .map(readWeek)
-    .sort((a, b) => a.week - b.week);
+  return getJournalWeeks().map((j) => {
+    const [first, ...rest] = j.photos;
+    return {
+      week: j.id,
+      slug: j.slug,
+      title: j.heading,
+      subtitle: j.subtitle,
+      date: j.date,
+      endDate: j.endDate,
+      instructor: j.instructor,
+      guest: j.guest,
+      phase: j.phase,
+      deliverable: j.deliverable,
+      milestone: j.syllabusMilestone,
+      project: j.project,
+      covered: j.covered,
+      tools: j.tools,
+      summary: j.entry.introduction || undefined,
+      cover: first ? { src: first.src, alt: first.alt, caption: first.caption } : undefined,
+      gallery: rest.map((p) => ({ src: p.src, alt: p.alt, caption: p.caption })),
+      videos: [],
+      links: [],
+      body: j.entry.description.trim(),
+    } satisfies Week;
+  });
 }
 
 export function getWeek(slug: string): Week | undefined {
